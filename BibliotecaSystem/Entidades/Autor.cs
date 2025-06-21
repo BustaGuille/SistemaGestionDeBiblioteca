@@ -8,8 +8,10 @@ namespace BibliotecaSystem.Entidades
 {
     public class Autor
     {
-        public int Id { get; set; }
-        public string NombreCompleto { get; set; }
+        public int IdAutor { get; set; }
+        public string NombreAutor { get; set; }
+
+        public string Nacionalidad { get; set; } //Nacionalidad del autor
     }
 }
 

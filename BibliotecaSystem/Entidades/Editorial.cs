@@ -8,8 +8,8 @@ namespace BibliotecaSystem.Entidades
 {
     public class Editorial
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+        public int IdEditorial { get; set; }
+        public string NombreEditorial { get; set; }
 
     }
 }

@@ -8,8 +8,8 @@ namespace BibliotecaSystem.Entidades
 {
     public class Categoria
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+        public int IdCategoria { get; set; }
+        public string NombreCategoria { get; set; }
     }
 }
 

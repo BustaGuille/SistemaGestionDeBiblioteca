@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+
 
 namespace BibliotecaSystem.Datos
 {
     public static class ConexionBD
     {
         // Aqui se define la cadena de conexión a la base de datos. 
-        private static readonly string cadenaConexion = "localhost:8080";
+        private static readonly string cadenaConexion = "Server=localhost;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
 
         public static SqlConnection ObtenerConexion()
         {

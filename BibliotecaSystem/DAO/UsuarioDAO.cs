@@ -1,13 +1,14 @@
-﻿using BibliotecaSystem.Entidades;
+﻿using BibliotecaSystem.Datos;
+using BibliotecaSystem.Entidades;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace BibliotecaSystem.DAO
 {
     public class UsuarioDAO
     {
-        public void AgregarUser(Usuario usuario)
+        public void AgregarUsuario(Usuario usuario)
         {
             try
             {
@@ -17,141 +18,152 @@ namespace BibliotecaSystem.DAO
                     var cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
                     cmd.Parameters.AddWithValue("@ContraseñaHash", usuario.ContraseñaHash);
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al agregar el usuario: " + ex.Message);
+                throw new Exception("Error al agregar usuario: " + ex.Message);
             }
         }
 
-        public void ModificarUser(Usuario usuario)
+        public void ModificarUsuario(Usuario usuario)
         {
             try
             {
                 using (var conn = ConexionBD.ObtenerConexion())
                 {
-                    var query = "UPDATE Usuarios SET NombreUsuario = @NombreUsuario, ContraseñaHash = @ContraseñaHash WHERE Id = @Id";
+                    var query = "UPDATE Usuarios SET NombreUsuario = @NombreUsuario, ContraseñaHash = @ContraseñaHash WHERE IdUser = @IdUser";
                     var cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
                     cmd.Parameters.AddWithValue("@ContraseñaHash", usuario.ContraseñaHash);
-                    cmd.Parameters.AddWithValue("@Id", usuario.Id);
+                    cmd.Parameters.AddWithValue("@IdUser", usuario.IdUser);
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al modificar el usuario: " + ex.Message);
+                throw new Exception("Error al modificar usuario: " + ex.Message);
             }
         }
 
-        public void EliminarUser(int id)
+        public void EliminarUsuario(int IdUser)
         {
             try
             {
                 using (var conn = ConexionBD.ObtenerConexion())
                 {
-                    var query = "DELETE FROM Usuarios WHERE Id = @Id";
+                    var query = "DELETE FROM Usuarios WHERE IdUser = @IdUser";
                     var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@IdUser", IdUser);
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al eliminar el usuario: " + ex.Message);
+                throw new Exception("Error al eliminar usuario: " + ex.Message);
             }
         }
 
-        public Usuario ObtenerUserPorId(int id)
+        public Usuario ObtenerUsuarioPorId(int IdUser)
         {
             try
             {
                 using (var conn = ConexionBD.ObtenerConexion())
                 {
-                    var query = "SELECT Id, NombreUsuario, ContraseñaHash FROM Usuarios WHERE Id = @Id";
+                    var query = "SELECT IdUsuario, NombreUsuario, ContraseñaHash FROM Usuarios WHERE IdUser = @IdUser";
                     var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@IdUser", IdUser);
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             return new Usuario
                             {
-                                Id = reader.GetInt32(0),
+                                IdUser = reader.GetInt32(0),
                                 NombreUsuario = reader.GetString(1),
                                 ContraseñaHash = reader.GetString(2)
                             };
                         }
                     }
                 }
-                return null;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener el usuario por ID: " + ex.Message);
+                throw new Exception("Error al obtener usuario por ID: " + ex.Message);
             }
+
+            return null;
         }
 
-        public Usuario ObtenerUserPorNombre(string nombreUsuario)
+        public Usuario ObtenerUsuarioPorNombre(string nombreUsuario)
         {
             try
             {
                 using (var conn = ConexionBD.ObtenerConexion())
                 {
-                    var query = "SELECT Id, NombreUsuario, ContraseñaHash FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
+                    var query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
                     var cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
+                    conn.Open();
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             return new Usuario
                             {
-                                Id = reader.GetInt32(0),
+                                IdUser = reader.GetInt32(0),
                                 NombreUsuario = reader.GetString(1),
                                 ContraseñaHash = reader.GetString(2)
                             };
                         }
                     }
                 }
-                return null;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener el usuario por nombre: " + ex.Message);
+                throw new Exception("Error al obtener usuario por nombre: " + ex.Message);
             }
+
+            return null;
         }
 
-        public List<Usuario> ListarUsuariosExistntes()
+        public List<Usuario> ListarUsuarios()
         {
+            List<Usuario> lista = new List<Usuario>();
+
             try
             {
-                List<Usuario> usuariosList = new List<Usuario>();
                 using (var conn = ConexionBD.ObtenerConexion())
                 {
-                    var query = "SELECT Id, NombreUsuario, ContraseñaHash FROM Usuarios";
+                    var query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios";
                     var cmd = new SqlCommand(query, conn);
+                    conn.Open();
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            usuariosList.Add(new Usuario
+                            lista.Add(new Usuario
                             {
-                                Id = reader.GetInt32(0),
+                                IdUser = reader.GetInt32(0),
                                 NombreUsuario = reader.GetString(1),
                                 ContraseñaHash = reader.GetString(2)
                             });
                         }
                     }
                 }
-                return usuariosList;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al listar los usuarios: " + ex.Message);
+                throw new Exception("Error al listar usuarios: " + ex.Message);
             }
+
+            return lista;
         }
     }
 }

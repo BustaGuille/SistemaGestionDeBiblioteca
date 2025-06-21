@@ -8,9 +8,8 @@ namespace BibliotecaSystem.Entidades
 {
     public class Libro
     {
-        public int Id { get; set; }
+        public int IdLibro { get; set; }
         public string Titulo { get; set; }
-        public string CodLibro { get; set; }
         public int AutorId { get; set; }
         public int CategoriaId { get; set; }
         public int EditorialId { get; set; }

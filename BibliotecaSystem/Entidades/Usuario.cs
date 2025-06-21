@@ -9,7 +9,7 @@ namespace BibliotecaSystem.Entidades
 {
     public class Usuario
     {
-        public int Id { get; set; }
+        public int IdUser { get; set; }
         public string NombreUsuario { get; set; }
         public string ContraseñaHash { get; set; }
         public bool VerificarPassword(string contraseñaPlano) //Metodo para verificar la contraseña ingresada por el usuario

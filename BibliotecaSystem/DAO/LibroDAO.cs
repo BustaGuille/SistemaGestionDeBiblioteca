@@ -1,5 +1,4 @@
-﻿using BibliotecaSystem.Datos;
-using BibliotecaSystem.Entidades;
+﻿using BibliotecaSystem.Entidades;
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
@@ -8,71 +7,79 @@ namespace BibliotecaSystem.DAO
 {
     public class LibroDAO
     {
+        static string cadenaConexion = "Server=localhost;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+
         public void AgregarLibro(Libro libro)
         {
-            try
-            {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = @"INSERT INTO Libros (Titulo, AutorId, EditorialId, CategoriaId, Estado, Cantidad)
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            { 
+                string query = @"INSERT INTO Libros (Titulo, AutorId, EditorialId, CategoriaId, Estado, Cantidad)
                                   VALUES (@Titulo, @AutorId, @EditorialId, @CategoriaId, @Estado, @Cantidad)";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Titulo", libro.Titulo);
-                    cmd.Parameters.AddWithValue("@AutorId", libro.AutorId);
-                    cmd.Parameters.AddWithValue("@EditorialId", libro.EditorialId);
-                    cmd.Parameters.AddWithValue("@CategoriaId", libro.CategoriaId);
-                    cmd.Parameters.AddWithValue("@Estado", (int)libro.Estado);
-                    cmd.Parameters.AddWithValue("@Cantidad", libro.CantidadDisponible);
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Titulo", libro.Titulo);
+                cmd.Parameters.AddWithValue("@AutorId", libro.AutorId);
+                cmd.Parameters.AddWithValue("@EditorialId", libro.EditorialId);
+                cmd.Parameters.AddWithValue("@CategoriaId", libro.CategoriaId);
+                cmd.Parameters.AddWithValue("@Estado", (int)libro.Estado);
+                cmd.Parameters.AddWithValue("@Cantidad", libro.CantidadDisponible);
+                try
+                {
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar el libro libro: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer agregar el libro.");
+                    throw new Exception("Ocurrio un error al agregar el libro: " + ex.Message);  
+                }
             }
         }
 
         public void ModificarLibro(Libro libro)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion()) //Abrimos la conexión a la base de datos
-                {
-                    var query = @"UPDATE Libros SET Titulo = @Titulo, AutorId = @AutorId, EditorialId = @EditorialId,
+                string query = @"UPDATE Libros SET Titulo = @Titulo, AutorId = @AutorId, EditorialId = @EditorialId,
                                   CategoriaId = @CategoriaId, Estado = @Estado, Cantidad = @Cantidad
                                   WHERE IdLibro = @IdLibro";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Titulo", libro.Titulo);
-                    cmd.Parameters.AddWithValue("@AutorId", libro.AutorId);
-                    cmd.Parameters.AddWithValue("@EditorialId", libro.EditorialId);
-                    cmd.Parameters.AddWithValue("@CategoriaId", libro.CategoriaId);
-                    cmd.Parameters.AddWithValue("@Estado", (int)libro.Estado);
-                    cmd.Parameters.AddWithValue("@Cantidad", libro.CantidadDisponible);
-                    cmd.Parameters.AddWithValue("@IdLibro", libro.IdLibro);
-                    cmd.ExecuteNonQuery(); //ejecuta la consulta sin esperar resultados
-                }//la conexión se cierra automáticamente al salir del bloque using
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al modificar el libro: " + ex.Message);
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Titulo", libro.Titulo);
+                cmd.Parameters.AddWithValue("@AutorId", libro.AutorId);
+                cmd.Parameters.AddWithValue("@EditorialId", libro.EditorialId);
+                cmd.Parameters.AddWithValue("@CategoriaId", libro.CategoriaId);
+                cmd.Parameters.AddWithValue("@Estado", (int)libro.Estado);
+                cmd.Parameters.AddWithValue("@Cantidad", libro.CantidadDisponible);
+                cmd.Parameters.AddWithValue("@IdLibro", libro.IdLibro);
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer modificar el libro.");
+                    throw new Exception("Error al modificar el libro: " + ex.Message);
+                }
             }
         }
 
         public void EliminarLibro(int idLibro)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "DELETE FROM Libros WHERE IdLibro = @IdLibro";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdLibro", idLibro);
+                try
                 {
-                    var query = "DELETE FROM Libros WHERE IdLibro = @IdLibro";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@IdLibro", idLibro);
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar el libro: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer elimar el libro.");
+                    throw new Exception("Error al eliminar el libro: " + ex.Message);
+                }
             }
         }
 
@@ -83,13 +90,13 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT * FROM Libros WHERE IdLibro = @IdLibro";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT * FROM Libros WHERE IdLibro = @IdLibro";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdLibro", idLibro);
                     conn.Open();
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -109,6 +116,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer obtener el libro.");
                 throw new Exception("Error al obtener el libro: " + ex.Message);
             }
 
@@ -120,14 +128,14 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT * FROM Libros WHERE Titulo = @Titulo";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT * FROM Libros WHERE Titulo = @Titulo";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@Titulo", titulo);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -147,6 +155,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer obtener el libro por título.");
                 throw new Exception("Error al obtener libro por título: " + ex.Message);
             }
 
@@ -159,12 +168,12 @@ namespace BibliotecaSystem.DAO
 
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT * FROM Libros";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT * FROM Libros";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     conn.Open();
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -184,6 +193,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer listar los libros.");
                 throw new Exception("Error al listar libros: " + ex.Message);
             }
 

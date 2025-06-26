@@ -1,5 +1,4 @@
-﻿using BibliotecaSystem.Datos;
-using BibliotecaSystem.Entidades;
+﻿using BibliotecaSystem.Entidades;
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
@@ -8,62 +7,68 @@ namespace BibliotecaSystem.DAO
 {
     public class UsuarioDAO
     {
+        static string cadenaConexion = "Server=localhost;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
         public void AgregarUsuario(Usuario usuario)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "INSERT INTO Usuarios (NombreUsuario, ContraseñaHash) VALUES (@NombreUsuario, @ContraseñaHash)";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
+                cmd.Parameters.AddWithValue("@ContraseñaHash", usuario.ContraseñaHash);
+                try
                 {
-                    var query = "INSERT INTO Usuarios (NombreUsuario, ContraseñaHash) VALUES (@NombreUsuario, @ContraseñaHash)";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
-                    cmd.Parameters.AddWithValue("@ContraseñaHash", usuario.ContraseñaHash);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar usuario: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer agregar al usuario.");
+                    throw new Exception("Error al agregar usuario: " + ex.Message);
+                }
             }
         }
 
         public void ModificarUsuario(Usuario usuario)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "UPDATE Usuarios SET NombreUsuario = @NombreUsuario, ContraseñaHash = @ContraseñaHash WHERE IdUser = @IdUser";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
+                cmd.Parameters.AddWithValue("@ContraseñaHash", usuario.ContraseñaHash);
+                cmd.Parameters.AddWithValue("@IdUser", usuario.IdUser);
+                try
                 {
-                    var query = "UPDATE Usuarios SET NombreUsuario = @NombreUsuario, ContraseñaHash = @ContraseñaHash WHERE IdUser = @IdUser";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreUsuario", usuario.NombreUsuario);
-                    cmd.Parameters.AddWithValue("@ContraseñaHash", usuario.ContraseñaHash);
-                    cmd.Parameters.AddWithValue("@IdUser", usuario.IdUser);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al modificar usuario: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer modificar al usuario.");
+                    throw new Exception("Error al modificar usuario: " + ex.Message);
+                }
             }
         }
 
         public void EliminarUsuario(int IdUser)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "DELETE FROM Usuarios WHERE IdUser = @IdUser";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdUser", IdUser);
+                cmd.ExecuteNonQuery();
+                try
                 {
-                    var query = "DELETE FROM Usuarios WHERE IdUser = @IdUser";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@IdUser", IdUser);
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar usuario: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer eliminar al usuario.");
+                    throw new Exception("Error al eliminar usuario: " + ex.Message);
+                }
             }
         }
 
@@ -71,13 +76,13 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdUsuario, NombreUsuario, ContraseñaHash FROM Usuarios WHERE IdUser = @IdUser";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdUsuario, NombreUsuario, ContraseñaHash FROM Usuarios WHERE IdUser = @IdUser";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdUser", IdUser);
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -93,6 +98,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer obtener al usuario por ID.");
                 throw new Exception("Error al obtener usuario por ID: " + ex.Message);
             }
 
@@ -103,14 +109,14 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -126,6 +132,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer obtener al usuario por nombre.");
                 throw new Exception("Error al obtener usuario por nombre: " + ex.Message);
             }
 
@@ -138,13 +145,13 @@ namespace BibliotecaSystem.DAO
 
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -160,6 +167,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer listar los usuario.");
                 throw new Exception("Error al listar usuarios: " + ex.Message);
             }
 

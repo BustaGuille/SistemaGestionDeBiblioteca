@@ -1,5 +1,4 @@
-﻿using BibliotecaSystem.Datos;
-using BibliotecaSystem.Entidades;
+﻿using BibliotecaSystem.Entidades;
 using Microsoft.IdentityModel.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,73 +8,78 @@ namespace BibliotecaSystem.DAO
 {
     public class SocioDAO
     {
+        static string cadenaConexion = "Server=localhost;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+
         public void AgregarSocio(Socio socio)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = @"INSERT INTO Socios (NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email) 
+                string query = @"INSERT INTO Socios (NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email) 
                                   VALUES (@NombreSocio, @CedulaSocio, @Direccion, @TelefonoSocio, @Email)";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreSocio", socio.NombreSocio);
-                    cmd.Parameters.AddWithValue("@CedulaSocio", socio.CedulaSocio);
-                    cmd.Parameters.AddWithValue("@Direccion", socio.Direccion);
-                    cmd.Parameters.AddWithValue("@TelefonoSocio", socio.TelefonoSocio);
-                    cmd.Parameters.AddWithValue("@Email", socio.Email);
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreSocio", socio.NombreSocio);
+                cmd.Parameters.AddWithValue("@CedulaSocio", socio.CedulaSocio);
+                cmd.Parameters.AddWithValue("@Direccion", socio.Direccion);
+                cmd.Parameters.AddWithValue("@TelefonoSocio", socio.TelefonoSocio);
+                cmd.Parameters.AddWithValue("@Email", socio.Email);
+                try
+                {
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex) {
-            
-                throw new Exception("Error al agregar socio: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer agregar el socio.");
+                    throw new Exception("Error al agregar socio: " + ex.Message);
+                }
             }
         }
 
         public void ModificarSocio(Socio socio)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = @"UPDATE Socios 
+                string query = @"UPDATE Socios 
                                   SET NombreSocio = @NombreSocio, CedulaSocio = @CedulaSocio, Direccion = @Direccion,
                                       TelefonoSocio = @TelefonoSocio, Email = @Email
                                   WHERE IdSocio = @IdSocio";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreSocio", socio.NombreSocio);
-                    cmd.Parameters.AddWithValue("@CedulaSocio", socio.CedulaSocio);
-                    cmd.Parameters.AddWithValue("@Direccion", socio.Direccion);
-                    cmd.Parameters.AddWithValue("@TelefonoSocio", socio.TelefonoSocio);
-                    cmd.Parameters.AddWithValue("@Email", socio.Email);
-                    cmd.Parameters.AddWithValue("@IdSocio", socio.IdSocio);
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreSocio", socio.NombreSocio);
+                cmd.Parameters.AddWithValue("@CedulaSocio", socio.CedulaSocio);
+                cmd.Parameters.AddWithValue("@Direccion", socio.Direccion);
+                cmd.Parameters.AddWithValue("@TelefonoSocio", socio.TelefonoSocio);
+                cmd.Parameters.AddWithValue("@Email", socio.Email);
+                cmd.Parameters.AddWithValue("@IdSocio", socio.IdSocio);
+                try
+                {
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al modificar socio: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer modificar el socio.");
+                    throw new Exception("Error al modificar socio: " + ex.Message);
+                }
             }
         }
 
         public void EliminarSocio(int idSocio)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "DELETE FROM Socios WHERE IdSocio = @IdSocio";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdSocio", idSocio);
+                try
                 {
-                    var query = "DELETE FROM Socios WHERE IdSocio = @IdSocio";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@IdSocio", idSocio);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar socio: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrio un error inesperado al querer eliminar el socio.");
+                    throw new Exception("Error al eliminar socio: " + ex.Message);
+                }
             }
         }
 
@@ -83,14 +87,14 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdSocio, NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email FROM Socios WHERE IdSocio = @IdSocio";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdSocio, NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email FROM Socios WHERE IdSocio = @IdSocio";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdSocio", idSocio);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -109,6 +113,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer obtener el socio.");
                 throw new Exception("Error al obtener socio: " + ex.Message);
             }
 
@@ -121,13 +126,13 @@ namespace BibliotecaSystem.DAO
 
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdSocio, NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email FROM Socios";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdSocio, NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email FROM Socios";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -146,6 +151,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrio un error inesperado al querer listar los socios.");
                 throw new Exception("Error al listar socios: " + ex.Message);
             }
 

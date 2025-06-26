@@ -1,5 +1,4 @@
-﻿using BibliotecaSystem.Datos;
-using BibliotecaSystem.Entidades;
+﻿using BibliotecaSystem.Entidades;
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
@@ -8,61 +7,65 @@ namespace BibliotecaSystem.DAO
 {
     public class CategoriaDAO
     {
+        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+
         public void AgregarCategoria(Categoria categoria)
         {
-            try
+
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "INSERT INTO Categorias (NombreCategoria) VALUES (@NombreCategoria)";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreCategoria", categoria.NombreCategoria);
+                try
                 {
-                    var query = "INSERT INTO Categorias (NombreCategoria) VALUES (@NombreCategoria)";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreCategoria", categoria.NombreCategoria);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar categoría: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error al querer agregar la categoría.");
+                    throw new Exception("Error al agregar categoría: " + ex.Message);
+                }
             }
         }
 
         public void ModificarCategoria(Categoria categoria)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = "UPDATE Categorias SET NombreCategoria = @NombreCategoria WHERE IdCategoria = @IdCategoria";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreCategoria", categoria.NombreCategoria);
-                    cmd.Parameters.AddWithValue("@IdCategoria", categoria.IdCategoria);
+                string query = "UPDATE Categorias SET NombreCategoria = @NombreCategoria WHERE IdCategoria = @IdCategoria";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreCategoria", categoria.NombreCategoria);
+                cmd.Parameters.AddWithValue("@IdCategoria", categoria.IdCategoria);
+                try { 
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al modificar categoría: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error al querer modificar la categoría.");
+                    throw new Exception("Error al modificar categoría: " + ex.Message);
+                }
             }
         }
 
         public void EliminarCategoria(int idCategoria)
-        {
-            try
+        { 
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = "DELETE FROM Categorias WHERE IdCategoria = @IdCategoria";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+                string query = "DELETE FROM Categorias WHERE IdCategoria = @IdCategoria";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
+                try { 
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar categoría: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error al querer eliminar la categoría.");
+                    throw new Exception("Error al eliminar categoría: " + ex.Message);
+                }
             }
         }
 
@@ -70,14 +73,14 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdCategoria, NombreCategoria FROM Categorias WHERE IdCategoria = @IdCategoria";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdCategoria, NombreCategoria FROM Categorias WHERE IdCategoria = @IdCategoria";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdCategoria", idCategoria);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -92,6 +95,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrió un error al querer obtener la categoría.");
                 throw new Exception("Error al obtener categoría: " + ex.Message);
             }
 
@@ -104,13 +108,13 @@ namespace BibliotecaSystem.DAO
 
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdCategoria, NombreCategoria FROM Categorias";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdCategoria, NombreCategoria FROM Categorias";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     conn.Open();
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -125,6 +129,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrió un error al querer listar las categorías.");
                 throw new Exception("Error al listar categorías: " + ex.Message);
             }
 

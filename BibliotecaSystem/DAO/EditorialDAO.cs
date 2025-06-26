@@ -1,5 +1,4 @@
-﻿using BibliotecaSystem.Datos;
-using BibliotecaSystem.Entidades;
+﻿using BibliotecaSystem.Entidades;
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
@@ -7,58 +6,66 @@ namespace BibliotecaSystem.DAO
 {
     public class EditorialDAO
     {
+        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+
         public void AgregarEditorial(Editorial editorial)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                string query = "INSERT INTO Editoriales (NombreEditorial) VALUES (@NombreEditorial)";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreEditorial", editorial.NombreEditorial);
+    
+                try
                 {
-                    var query = "INSERT INTO Editoriales (NombreEditorial) VALUES (@NombreEditorial)";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreEditorial", editorial.NombreEditorial);
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar editorial: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error al querer agregar la editorial.");
+                    throw new Exception("Error al agregar editorial: " + ex.Message);
+                }
             }
         }
 
         public void ModificarEditorial(Editorial editorial)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = "UPDATE Editoriales SET NombreEditorial = @NombreEditorial WHERE IdEditorial = @IdEditorial";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@NombreEditorial", editorial.NombreEditorial);
-                    cmd.Parameters.AddWithValue("@IdEditorial", editorial.IdEditorial);
+                string query = "UPDATE Editoriales SET NombreEditorial = @NombreEditorial WHERE IdEditorial = @IdEditorial";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@NombreEditorial", editorial.NombreEditorial);
+                cmd.Parameters.AddWithValue("@IdEditorial", editorial.IdEditorial);
+                try { 
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al modificar editorial: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error al querer modificar la editorial.");
+                    throw new Exception("Error al modificar editorial: " + ex.Message);
+                }
             }
         }
 
         public void EliminarEditorial(int idEditorial)
         {
-            try
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                using (var conn = ConexionBD.ObtenerConexion())
-                {
-                    var query = "DELETE FROM Editoriales WHERE IdEditorial = @IdEditorial";
-                    var cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@IdEditorial", idEditorial);
+                 string query = "DELETE FROM Editoriales WHERE IdEditorial = @IdEditorial";
+                 SqlCommand cmd = new SqlCommand(query, conn);
+                 cmd.Parameters.AddWithValue("@IdEditorial", idEditorial);
+
+                try { 
+                    conn.Open();
                     cmd.ExecuteNonQuery();
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar editorial: " + ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocurrió un error al querer eliminar la editorial.");
+                    throw new Exception("Error al eliminar editorial: " + ex.Message);
+                }
             }
         }
 
@@ -66,13 +73,13 @@ namespace BibliotecaSystem.DAO
         {
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdEditorial, NombreEditorial FROM Editoriales WHERE IdEditorial = @IdEditorial";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdEditorial, NombreEditorial FROM Editoriales WHERE IdEditorial = @IdEditorial";
+                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdEditorial", idEditorial);
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -87,6 +94,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrió un error al querer obtener la editorial por ID.");
                 throw new Exception("Error al obtener editorial: " + ex.Message);
             }
 
@@ -99,12 +107,12 @@ namespace BibliotecaSystem.DAO
 
             try
             {
-                using (var conn = ConexionBD.ObtenerConexion())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    var query = "SELECT IdEditorial, NombreEditorial FROM Editoriales";
-                    var cmd = new SqlCommand(query, conn);
+                    string query = "SELECT IdEditorial, NombreEditorial FROM Editoriales";
+                    SqlCommand cmd = new SqlCommand(query, conn);
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -119,6 +127,7 @@ namespace BibliotecaSystem.DAO
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Ocurrió un error al querer listar las editoriales.");
                 throw new Exception("Error al listar editoriales: " + ex.Message);
             }
 

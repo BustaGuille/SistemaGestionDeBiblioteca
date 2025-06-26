@@ -8,10 +8,7 @@ namespace BibliotecaSystem.DAO
     public class PrestamoDAO
     {
 
-
-        static string cadenaConexion = "Server=localhost;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
-
-   
+        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
 
         public void RegistrarPrestamo(Prestamo prestamo)
         {
@@ -43,11 +40,11 @@ namespace BibliotecaSystem.DAO
         public void MarcarComoDevuelto(int idPrestamo)
         {
         
-                using (SqlConnection conn = new SqlConnection())
-                {
-                    string query = "UPDATE Prestamos SET Devuelto = 1 WHERE IdPrestamo = @IdPrestamo";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@IdPrestamo", idPrestamo);
+            using (SqlConnection conn = new SqlConnection())
+            {
+                string query = "UPDATE Prestamos SET Devuelto = 1 WHERE IdPrestamo = @IdPrestamo";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdPrestamo", idPrestamo);
 
                 try
                 {
@@ -59,6 +56,7 @@ namespace BibliotecaSystem.DAO
                     Console.WriteLine("Error al marcar préstamo como devuelto: " + ex.Message);
                     throw new Exception("Ocurrio un error inesperado al marcar el prestamo como devuelto: " + ex.Message);
                 }
+            }
         }
 
         public List<Prestamo> ObtenerTodosLosPrestamos()

@@ -10,6 +10,14 @@ namespace BibliotecaSystem.Entidades
     {
         public int IdCategoria { get; set; }
         public string NombreCategoria { get; set; }
+
+        public Categoria() { }
+
+        public override string ToString()
+        {
+            return NombreCategoria;
+        }
+
     }
 }
 

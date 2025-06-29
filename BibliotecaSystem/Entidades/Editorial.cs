@@ -11,6 +11,13 @@ namespace BibliotecaSystem.Entidades
         public int IdEditorial { get; set; }
         public string NombreEditorial { get; set; }
 
+        public Editorial() { }
+
+        public override string ToString()
+        {
+            return NombreEditorial;
+        }
+
     }
 }
 

@@ -11,7 +11,14 @@ namespace BibliotecaSystem.Entidades
         public int IdAutor { get; set; }
         public string NombreAutor { get; set; }
 
-        public string Nacionalidad { get; set; } //Nacionalidad del autor
+        public string Nacionalidad { get; set; }
+
+        public Autor() { }
+
+        public override string ToString()
+        {
+            return NombreAutor + " (" + Nacionalidad + ")";
+        }
     }
 }
 

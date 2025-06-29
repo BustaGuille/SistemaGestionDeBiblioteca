@@ -14,6 +14,13 @@ namespace BibliotecaSystem.Entidades
         public string Direccion { get; set; }
         public string TelefonoSocio { get; set; }
         public string Email { get; set; }
+
+        public Socio() { }
+
+        public override string ToString()
+        {
+            return NombreSocio + " - " + CedulaSocio;
+        }
     }
 }
 

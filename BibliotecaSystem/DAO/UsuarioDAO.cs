@@ -7,7 +7,8 @@ namespace BibliotecaSystem.DAO
 {
     public class UsuarioDAO
     {
-        static string cadenaConexion = "Server=localhost;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+
         public void AgregarUsuario(Usuario usuario)
         {
             using (SqlConnection conn = new SqlConnection(cadenaConexion))

@@ -15,6 +15,13 @@ namespace BibliotecaSystem.Entidades
         public int EditorialId { get; set; }
         public EstadoDeLibroEnum Estado { get; set; }
         public int CantidadDisponible { get; set; }
+
+        public Libro() { }
+
+        public override string ToString()
+        {
+            return Titulo;
+        }
     }
 }
 

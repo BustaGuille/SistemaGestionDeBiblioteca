@@ -16,6 +16,13 @@ namespace BibliotecaSystem.Entidades
         {
             return LogicaSeguridad.HashPassword(contraseñaPlano) == ContraseñaHash; //Compara el hash de la contraseña ingresada (Texto plano) con la contraseña almacenada (Hash)
         }
+
+        public Usuario() { }
+
+        public override string ToString()
+        {
+            return NombreUsuario;
+        }
     }
 }
 

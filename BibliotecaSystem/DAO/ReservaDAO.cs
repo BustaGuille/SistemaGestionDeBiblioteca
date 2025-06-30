@@ -36,6 +36,27 @@ namespace BibliotecaSystem.DAO
             }
         }
 
+        public void EliminarReserva(int idReserva)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = "DELETE FROM Reservas WHERE IdReserva = @IdReserva";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdReserva", idReserva);
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al eliminar la reserva: " + ex.Message);
+                    throw;
+                }
+            }
+        }
+
+
         public List<Reserva> ListarReservas()
         {
             List<Reserva> lista = new List<Reserva>();

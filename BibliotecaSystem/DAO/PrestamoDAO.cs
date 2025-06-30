@@ -37,6 +37,28 @@ namespace BibliotecaSystem.DAO
          
         }
 
+        public void EliminarPrestamo(int idPrestamo)
+        {
+            
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = "DELETE FROM Prestamos WHERE IdPrestamo = @IdPrestamo";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdPrestamo", idPrestamo);
+                 
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al eliminar el préstamo.");
+                    throw new Exception("Ocurrio un error inesperado al eliminar el prestamo: " + ex.Message);
+                }
+            }
+        }
+
         public void MarcarComoDevuelto(int idPrestamo)
         {
         

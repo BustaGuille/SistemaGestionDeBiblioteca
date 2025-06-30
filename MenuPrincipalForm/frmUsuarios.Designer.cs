@@ -31,12 +31,10 @@
             label1 = new Label();
             txtNombreUsuario = new TextBox();
             label2 = new Label();
-            txtContraseña = new TextBox();
+            txtContrasena = new TextBox();
             btnAgregar = new Button();
             btnModificar = new Button();
             btnEliminar = new Button();
-            btnBuscar = new Button();
-            txtIdBuscar = new TextBox();
             dgvUsuarios = new DataGridView();
             label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).BeginInit();
@@ -45,99 +43,87 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point, 1, true);
-            label1.Location = new Point(442, 135);
+            label1.Font = new Font("Segoe UI", 12F);
+            label1.Location = new Point(503, 136);
             label1.Name = "label1";
-            label1.Size = new Size(184, 28);
+            label1.Size = new Size(147, 21);
             label1.TabIndex = 0;
             label1.Text = "Nombre de Usuario";
             // 
             // txtNombreUsuario
             // 
-            txtNombreUsuario.Location = new Point(479, 178);
+            txtNombreUsuario.Font = new Font("Segoe UI", 11F);
+            txtNombreUsuario.Location = new Point(426, 180);
             txtNombreUsuario.Name = "txtNombreUsuario";
-            txtNombreUsuario.Size = new Size(100, 23);
+            txtNombreUsuario.Size = new Size(312, 27);
             txtNombreUsuario.TabIndex = 1;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point, 1, true);
-            label2.Location = new Point(469, 216);
+            label2.Font = new Font("Segoe UI", 12F);
+            label2.Location = new Point(524, 229);
             label2.Name = "label2";
-            label2.Size = new Size(110, 28);
+            label2.Size = new Size(89, 21);
             label2.TabIndex = 2;
             label2.Text = "Contraseña";
             // 
-            // txtContraseña
+            // txtContrasena
             // 
-            txtContraseña.Location = new Point(479, 275);
-            txtContraseña.Name = "txtContraseña";
-            txtContraseña.Size = new Size(100, 23);
-            txtContraseña.TabIndex = 3;
-            txtContraseña.UseSystemPasswordChar = true;
+            txtContrasena.Font = new Font("Segoe UI", 11F);
+            txtContrasena.Location = new Point(426, 268);
+            txtContrasena.Name = "txtContrasena";
+            txtContrasena.Size = new Size(312, 27);
+            txtContrasena.TabIndex = 3;
+            txtContrasena.UseSystemPasswordChar = true;
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(277, 328);
+            btnAgregar.Font = new Font("Segoe UI", 12F);
+            btnAgregar.Location = new Point(263, 329);
             btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(100, 23);
+            btnAgregar.Size = new Size(150, 50);
             btnAgregar.TabIndex = 4;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(410, 328);
+            btnModificar.Font = new Font("Segoe UI", 12F);
+            btnModificar.Location = new Point(503, 329);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(101, 23);
+            btnModificar.Size = new Size(150, 50);
             btnModificar.TabIndex = 5;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = true;
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(551, 328);
+            btnEliminar.Font = new Font("Segoe UI", 12F);
+            btnEliminar.Location = new Point(740, 329);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(100, 23);
+            btnEliminar.Size = new Size(150, 50);
             btnEliminar.TabIndex = 6;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
-            // btnBuscar
-            // 
-            btnBuscar.Location = new Point(698, 328);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(100, 23);
-            btnBuscar.TabIndex = 7;
-            btnBuscar.Text = "Buscar por ID";
-            btnBuscar.UseVisualStyleBackColor = true;
-            // 
-            // txtIdBuscar
-            // 
-            txtIdBuscar.Location = new Point(698, 366);
-            txtIdBuscar.Name = "txtIdBuscar";
-            txtIdBuscar.Size = new Size(100, 23);
-            txtIdBuscar.TabIndex = 8;
-            txtIdBuscar.Text = "ID Usuarios";
-            // 
             // dgvUsuarios
             // 
             dgvUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvUsuarios.Location = new Point(342, 448);
+            dgvUsuarios.Location = new Point(143, 513);
             dgvUsuarios.Name = "dgvUsuarios";
-            dgvUsuarios.Size = new Size(361, 257);
+            dgvUsuarios.Size = new Size(848, 319);
             dgvUsuarios.TabIndex = 9;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 50F);
-            label3.Location = new Point(11, 8);
+            label3.Font = new Font("Segoe UI", 30F);
+            label3.Location = new Point(251, 66);
             label3.Name = "label3";
-            label3.Size = new Size(1116, 89);
+            label3.Size = new Size(649, 54);
             label3.TabIndex = 10;
-            label3.Text = "Bienvenido al fomularios de usuarios";
+            label3.Text = "Bienvenido al fomulario del usuario";
             // 
             // frmUsuarios
             // 
@@ -146,18 +132,16 @@
             ClientSize = new Size(1122, 884);
             Controls.Add(label3);
             Controls.Add(dgvUsuarios);
-            Controls.Add(txtIdBuscar);
-            Controls.Add(btnBuscar);
             Controls.Add(btnEliminar);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
-            Controls.Add(txtContraseña);
+            Controls.Add(txtContrasena);
             Controls.Add(label2);
             Controls.Add(txtNombreUsuario);
             Controls.Add(label1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 1, true);
             Name = "frmUsuarios";
-            Text = "frmUsuarios";
+            Text = "Usuario";
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -168,12 +152,10 @@
         private Label label1;
         private TextBox txtNombreUsuario;
         private Label label2;
-        private TextBox txtContraseña;
+        private TextBox txtContrasena;
         private Button btnAgregar;
         private Button btnModificar;
         private Button btnEliminar;
-        private Button btnBuscar;
-        private TextBox txtIdBuscar;
         private DataGridView dgvUsuarios;
         private Label label3;
     }

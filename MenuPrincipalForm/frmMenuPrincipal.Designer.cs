@@ -48,7 +48,9 @@
             manualDeUsuariosToolStripMenuItem = new ToolStripMenuItem();
             versionToolStripMenuItem = new ToolStripMenuItem();
             label1 = new Label();
+            pictureBox1 = new PictureBox();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -56,155 +58,176 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { sistemaToolStripMenuItem, gestionToolStripMenuItem, movimientosToolStripMenuItem, ayudaToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1164, 24);
+            menuStrip1.Padding = new Padding(10, 4, 0, 4);
+            menuStrip1.Size = new Size(871, 37);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
             // sistemaToolStripMenuItem
             // 
             sistemaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { acercaDeToolStripMenuItem, salirToolStripMenuItem });
+            sistemaToolStripMenuItem.Font = new Font("Segoe UI", 14F);
             sistemaToolStripMenuItem.Name = "sistemaToolStripMenuItem";
-            sistemaToolStripMenuItem.Size = new Size(60, 20);
+            sistemaToolStripMenuItem.Size = new Size(89, 29);
             sistemaToolStripMenuItem.Text = "Sistema";
             // 
             // acercaDeToolStripMenuItem
             // 
             acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
-            acercaDeToolStripMenuItem.Size = new Size(126, 22);
+            acercaDeToolStripMenuItem.Size = new Size(180, 30);
             acercaDeToolStripMenuItem.Text = "Acerca de";
             acercaDeToolStripMenuItem.Click += acercaDeToolStripMenuItem_Click;
             // 
             // salirToolStripMenuItem
             // 
             salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            salirToolStripMenuItem.Size = new Size(126, 22);
+            salirToolStripMenuItem.Size = new Size(180, 30);
             salirToolStripMenuItem.Text = "Salir";
             salirToolStripMenuItem.Click += salirToolStripMenuItem_Click;
             // 
             // gestionToolStripMenuItem
             // 
             gestionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { usuariosToolStripMenuItem, librosToolStripMenuItem, sociosToolStripMenuItem, autoresToolStripMenuItem, editorialesToolStripMenuItem, categoriasToolStripMenuItem });
+            gestionToolStripMenuItem.Font = new Font("Segoe UI", 14F);
             gestionToolStripMenuItem.Name = "gestionToolStripMenuItem";
-            gestionToolStripMenuItem.Size = new Size(59, 20);
+            gestionToolStripMenuItem.Size = new Size(88, 29);
             gestionToolStripMenuItem.Text = "Gestion";
             // 
             // usuariosToolStripMenuItem
             // 
             usuariosToolStripMenuItem.Name = "usuariosToolStripMenuItem";
-            usuariosToolStripMenuItem.Size = new Size(130, 22);
+            usuariosToolStripMenuItem.Size = new Size(180, 30);
             usuariosToolStripMenuItem.Text = "Usuarios";
             usuariosToolStripMenuItem.Click += usuariosToolStripMenuItem_Click;
             // 
             // librosToolStripMenuItem
             // 
             librosToolStripMenuItem.Name = "librosToolStripMenuItem";
-            librosToolStripMenuItem.Size = new Size(130, 22);
+            librosToolStripMenuItem.Size = new Size(180, 30);
             librosToolStripMenuItem.Text = "Libros";
             librosToolStripMenuItem.Click += librosToolStripMenuItem_Click;
             // 
             // sociosToolStripMenuItem
             // 
             sociosToolStripMenuItem.Name = "sociosToolStripMenuItem";
-            sociosToolStripMenuItem.Size = new Size(130, 22);
+            sociosToolStripMenuItem.Size = new Size(180, 30);
             sociosToolStripMenuItem.Text = "Socios";
             sociosToolStripMenuItem.Click += sociosToolStripMenuItem_Click;
             // 
             // autoresToolStripMenuItem
             // 
             autoresToolStripMenuItem.Name = "autoresToolStripMenuItem";
-            autoresToolStripMenuItem.Size = new Size(130, 22);
+            autoresToolStripMenuItem.Size = new Size(180, 30);
             autoresToolStripMenuItem.Text = "Autores";
             autoresToolStripMenuItem.Click += autoresToolStripMenuItem_Click;
             // 
             // editorialesToolStripMenuItem
             // 
             editorialesToolStripMenuItem.Name = "editorialesToolStripMenuItem";
-            editorialesToolStripMenuItem.Size = new Size(130, 22);
+            editorialesToolStripMenuItem.Size = new Size(180, 30);
             editorialesToolStripMenuItem.Text = "Editoriales";
             editorialesToolStripMenuItem.Click += editorialesToolStripMenuItem_Click;
             // 
             // categoriasToolStripMenuItem
             // 
             categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(130, 22);
+            categoriasToolStripMenuItem.Size = new Size(180, 30);
             categoriasToolStripMenuItem.Text = "Categorias";
             categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
             // 
             // movimientosToolStripMenuItem
             // 
             movimientosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { prestamosToolStripMenuItem, reservasToolStripMenuItem, multasToolStripMenuItem, historialToolStripMenuItem });
+            movimientosToolStripMenuItem.Font = new Font("Segoe UI", 14F);
             movimientosToolStripMenuItem.Name = "movimientosToolStripMenuItem";
-            movimientosToolStripMenuItem.Size = new Size(89, 20);
+            movimientosToolStripMenuItem.Size = new Size(133, 29);
             movimientosToolStripMenuItem.Text = "Movimientos";
             // 
             // prestamosToolStripMenuItem
             // 
             prestamosToolStripMenuItem.Name = "prestamosToolStripMenuItem";
-            prestamosToolStripMenuItem.Size = new Size(180, 22);
+            prestamosToolStripMenuItem.Size = new Size(171, 30);
             prestamosToolStripMenuItem.Text = "Prestamos";
             prestamosToolStripMenuItem.Click += prestamosToolStripMenuItem_Click;
             // 
             // reservasToolStripMenuItem
             // 
             reservasToolStripMenuItem.Name = "reservasToolStripMenuItem";
-            reservasToolStripMenuItem.Size = new Size(180, 22);
+            reservasToolStripMenuItem.Size = new Size(171, 30);
             reservasToolStripMenuItem.Text = "Reservas";
             reservasToolStripMenuItem.Click += reservasToolStripMenuItem_Click;
             // 
             // multasToolStripMenuItem
             // 
             multasToolStripMenuItem.Name = "multasToolStripMenuItem";
-            multasToolStripMenuItem.Size = new Size(180, 22);
+            multasToolStripMenuItem.Size = new Size(171, 30);
             multasToolStripMenuItem.Text = "Multas";
             multasToolStripMenuItem.Click += multasToolStripMenuItem_Click;
             // 
             // historialToolStripMenuItem
             // 
             historialToolStripMenuItem.Name = "historialToolStripMenuItem";
-            historialToolStripMenuItem.Size = new Size(180, 22);
+            historialToolStripMenuItem.Size = new Size(171, 30);
             historialToolStripMenuItem.Text = "Historial";
             historialToolStripMenuItem.Click += historialToolStripMenuItem_Click;
             // 
             // ayudaToolStripMenuItem
             // 
             ayudaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manualDeUsuariosToolStripMenuItem, versionToolStripMenuItem });
+            ayudaToolStripMenuItem.Font = new Font("Segoe UI", 14F);
             ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
-            ayudaToolStripMenuItem.Size = new Size(53, 20);
+            ayudaToolStripMenuItem.Size = new Size(77, 29);
             ayudaToolStripMenuItem.Text = "Ayuda";
             // 
             // manualDeUsuariosToolStripMenuItem
             // 
             manualDeUsuariosToolStripMenuItem.Name = "manualDeUsuariosToolStripMenuItem";
-            manualDeUsuariosToolStripMenuItem.Size = new Size(180, 22);
+            manualDeUsuariosToolStripMenuItem.Size = new Size(250, 30);
             manualDeUsuariosToolStripMenuItem.Text = "Manual de usuarios";
-                        // 
+            // 
             // versionToolStripMenuItem
             // 
             versionToolStripMenuItem.Name = "versionToolStripMenuItem";
-            versionToolStripMenuItem.Size = new Size(180, 22);
+            versionToolStripMenuItem.Size = new Size(250, 30);
             versionToolStripMenuItem.Text = "Version";
             versionToolStripMenuItem.Click += versionToolStripMenuItem_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(239, 405);
+            label1.Font = new Font("Segoe UI", 30F);
+            label1.Location = new Point(14, 146);
+            label1.Margin = new Padding(5, 0, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(255, 15);
+            label1.Size = new Size(845, 54);
             label1.TabIndex = 1;
-            label1.Text = "Bienvenido al sistema de gestion de bibliotecas";
+            label1.Text = "Bienvenido al sistema de gestion de biblioteca";
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = BibliotecaApp.UI.Properties.Resources.ofe5l4d9e0m61;
+            pictureBox1.Location = new Point(66, 283);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(723, 394);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 2;
+            pictureBox1.TabStop = false;
             // 
             // frmMenuPrincipal
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1164, 1029);
+            ClientSize = new Size(871, 866);
+            Controls.Add(pictureBox1);
             Controls.Add(label1);
             Controls.Add(menuStrip1);
+            Font = new Font("Segoe UI", 14F);
+            Margin = new Padding(5, 5, 5, 5);
             Name = "frmMenuPrincipal";
-            Text = "Form1";
+            Text = "Menu Principal";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -231,5 +254,6 @@
         private ToolStripMenuItem manualDeUsuariosToolStripMenuItem;
         private ToolStripMenuItem versionToolStripMenuItem;
         private Label label1;
+        private PictureBox pictureBox1;
     }
 }

@@ -6,8 +6,7 @@ namespace BibliotecaSystem.DAO
 {
     public class EditorialDAO
     {
-        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
-
+        static string cadenaConexion = "Server=(local)\\SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
         public void AgregarEditorial(Editorial editorial)
         {
             using (SqlConnection conn = new SqlConnection(cadenaConexion))

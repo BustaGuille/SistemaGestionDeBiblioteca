@@ -10,8 +10,7 @@ namespace BibliotecaSystem.DAO
 {
     public class MultaDAO
     {
-        private static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
-
+        static string cadenaConexion = "Server=(local)\\SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
         public void RegistrarMulta(Multa multa)
         {
             using (SqlConnection conn = new SqlConnection(cadenaConexion))

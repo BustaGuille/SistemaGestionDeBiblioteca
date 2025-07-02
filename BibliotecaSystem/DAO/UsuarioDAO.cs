@@ -7,7 +7,7 @@ namespace BibliotecaSystem.DAO
 {
     public class UsuarioDAO
     {
-        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
+        static string cadenaConexion = "Server=(local)\\SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
 
         public void AgregarUsuario(Usuario usuario)
         {
@@ -59,7 +59,6 @@ namespace BibliotecaSystem.DAO
                 string query = "DELETE FROM Usuarios WHERE IdUser = @IdUser";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@IdUser", IdUser);
-                cmd.ExecuteNonQuery();
                 try
                 {
                     conn.Open();
@@ -79,9 +78,11 @@ namespace BibliotecaSystem.DAO
             {
                 using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
-                    string query = "SELECT IdUsuario, NombreUsuario, ContraseñaHash FROM Usuarios WHERE IdUser = @IdUser";
+                    string query = "SELECT IdUser, NombreUsuario, ContraseñaHash FROM Usuarios WHERE IdUser = @IdUser";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdUser", IdUser);
+
+                    conn.Open();
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {

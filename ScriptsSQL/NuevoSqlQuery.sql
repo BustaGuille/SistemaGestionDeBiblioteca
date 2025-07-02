@@ -1,31 +1,33 @@
---Query que Crea de la tabla de usuarios
+
+USE BibliotecaDB;
+GO
+-- Tabla de usuarios
 CREATE TABLE Usuarios (
-IdUser INT PRIMARY KEY IDENTITY(1,1),
-NombreUsuario NVARCHAR(50) NOT NULL,
-ContraseñaHash NVARCHAR(256) NOT NULL
+    IdUser INT PRIMARY KEY IDENTITY(1,1),
+    NombreUsuario NVARCHAR(50) NOT NULL,
+    ContraseñaHash NVARCHAR(256) NOT NULL
 );
 
---Query que crea la tabla de categorias
-
+-- Tabla de categorías
 CREATE TABLE Categorias (
-IdCategoria INT PRIMARY KEY IDENTITY (1,1),
-NombreCategoria NVARCHAR(100) NOT NULL
+    IdCategoria INT PRIMARY KEY IDENTITY(1,1),
+    NombreCategoria NVARCHAR(100) NOT NULL
 );
 
---Query que crea la tabla de autores
+-- Tabla de autores
 CREATE TABLE Autores (
     IdAutor INT PRIMARY KEY IDENTITY(1,1),
     NombreAutor NVARCHAR(100) NOT NULL,
     Nacionalidad NVARCHAR(100)
 );
 
---Query que crea la tabla de Editoriales
+-- Tabla de editoriales
 CREATE TABLE Editoriales (
     IdEditorial INT PRIMARY KEY IDENTITY(1,1),
     NombreEditorial NVARCHAR(100) NOT NULL
 );
 
---Query que crea la tabla de Libros
+-- Tabla de libros
 CREATE TABLE Libros (
     IdLibro INT PRIMARY KEY IDENTITY(1,1),
     Titulo NVARCHAR(200) NOT NULL,
@@ -36,8 +38,7 @@ CREATE TABLE Libros (
     Cantidad INT NOT NULL
 );
 
-
---Query que crea la tabla se Socio
+-- Tabla de socios
 CREATE TABLE Socios (
     IdSocio INT PRIMARY KEY IDENTITY(1,1),
     NombreSocio NVARCHAR(100) NOT NULL,
@@ -47,18 +48,18 @@ CREATE TABLE Socios (
     Email NVARCHAR(100)
 );
 
---Query que crea la tabla de prestamos
+-- Tabla de préstamos
 CREATE TABLE Prestamos (
     IdPrestamo INT PRIMARY KEY IDENTITY(1,1),
-    LibroId  INT FOREIGN KEY REFERENCES Libros(IdLibro),
+    LibroId INT FOREIGN KEY REFERENCES Libros(IdLibro),
     UsuarioId INT FOREIGN KEY REFERENCES Usuarios(IdUser),
-    SocioId INT FOREIGN KEY REFERENCES Socios(IdSocio), 
+    SocioId INT FOREIGN KEY REFERENCES Socios(IdSocio),
     FechaPrestamo DATE NOT NULL,
     FechaDevolucion DATE,
-    Devuelto BIT DEFAULT 0  --Tipo boolean por defecto es 0
+    Devuelto BIT DEFAULT 0
 );
 
---Query que crea la tabla de reservas
+-- Tabla de reservas
 CREATE TABLE Reservas (
     IdReserva INT PRIMARY KEY IDENTITY(1,1),
     IdLibro INT FOREIGN KEY REFERENCES Libros(IdLibro),
@@ -67,7 +68,7 @@ CREATE TABLE Reservas (
     Activa BIT DEFAULT 1
 );
 
---Query que crea la tabla de Historial
+-- Tabla de historial
 CREATE TABLE Historial (
     IdHistorial INT PRIMARY KEY IDENTITY(1,1),
     IdPrestamo INT,
@@ -79,5 +80,19 @@ CREATE TABLE Historial (
 );
 
 
+CREATE TABLE Multas (
+    IdMulta INT PRIMARY KEY IDENTITY(1,1),
+    IdSocio INT FOREIGN KEY REFERENCES Socios(IdSocio),
+    Monto DECIMAL(10, 2) NOT NULL,
+    FechaGeneracion DATE NOT NULL,
+    Motivo NVARCHAR(200),
+    Pagada BIT DEFAULT 0
+);
+
+--PARA INSERTAR EL USUARIO ADMIN
+
+INSERT INTO Usuarios (NombreUsuario, ContraseñaHash)
+VALUES ('Admin', 'qiV2cjniGJTfHrjB4zSLGE0BzhQGDgSDjphUGwfBKQM=');
 
 
+SELECT * FROM Usuarios;

@@ -1,5 +1,6 @@
 ﻿using BibliotecaSystem.DAO;
 using BibliotecaSystem.Entidades;
+using BibliotecaSystem.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +29,11 @@ namespace BibliotecaApp.UI
         {
             dgvUsuarios.DataSource = null;
             dgvUsuarios.DataSource = usuarioDAO.ListarUsuarios();
+
+            if (dgvUsuarios.Columns["ContraseñaHash"] != null)
+            {
+                dgvUsuarios.Columns["ContraseñaHash"].Visible = false; // Ocultamos la columna de contraseña hash si es que existe
+            }
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -51,27 +57,41 @@ namespace BibliotecaApp.UI
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            if (idUsuarioSeleccionado == null) return;
-
-            Usuario modificado = new Usuario
+            if (string.IsNullOrWhiteSpace(txtBuscarId.Text))
             {
-                IdUser = idUsuarioSeleccionado.Value,
+                MessageBox.Show("Debes buscar un usuario antes de modificarlo.");
+                return;
+            }
+
+            Usuario usuario = new Usuario
+            {
+                IdUser = int.Parse(txtBuscarId.Text), // Este debe venir del textbox de ID cargado tras la búsqueda
                 NombreUsuario = txtNombreUsuario.Text,
-                ContraseñaHash = BibliotecaSystem.Utilidades.LogicaSeguridad.HashPassword(txtContrasena.Text)
+                ContraseñaHash = LogicaSeguridad.HashPassword(txtContrasena.Text)
             };
 
-            usuarioDAO.ModificarUsuario(modificado);
-            CargarUsuarios();
+            usuarioDAO.ModificarUsuario(usuario);
+            MessageBox.Show("Usuario modificado con éxito.");
+            CargarUsuarios(); // Este es para volver a cargar la grilla 
             LimpiarCampos();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (idUsuarioSeleccionado == null) return;
+            if (idUsuarioSeleccionado == null)
+            {
+                MessageBox.Show("Debe buscar un usuario antes de eliminar.");
+                return;
+            }
 
-            usuarioDAO.EliminarUsuario(idUsuarioSeleccionado.Value);
-            CargarUsuarios();
-            LimpiarCampos();
+            DialogResult confirmacion = MessageBox.Show("¿Está seguro que desea eliminar este usuario?", "Confirmar eliminación", MessageBoxButtons.YesNo);
+            if (confirmacion == DialogResult.Yes)
+            {
+                usuarioDAO.EliminarUsuario(idUsuarioSeleccionado.Value);
+                MessageBox.Show("Usuario eliminado.");
+                CargarUsuarios();
+                LimpiarCampos();
+            }
         }
 
         private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -82,7 +102,7 @@ namespace BibliotecaApp.UI
 
                 idUsuarioSeleccionado = Convert.ToInt32(fila.Cells["IdUser"].Value); // Aquí se guarda el ID
                 txtNombreUsuario.Text = fila.Cells["NombreUsuario"].Value.ToString();
-                txtContrasena.Text = ""; // O podés dejar vacío para no mostrar hash
+                txtContrasena.Text = ""; //para que no se muestre la contraseña en texto plano
             }
         }
 
@@ -91,6 +111,30 @@ namespace BibliotecaApp.UI
             txtNombreUsuario.Text = "";
             txtContrasena.Text = "";
             idUsuarioSeleccionado = null;
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(txtBuscarId.Text.Trim(), out int idUsuario))
+            {
+                Usuario usuario = usuarioDAO.ObtenerUsuarioPorId(idUsuario);
+                if (usuario != null)
+                {
+                    txtNombreUsuario.Text = usuario.NombreUsuario;
+                    txtContrasena.Text = "";
+
+                    idUsuarioSeleccionado = usuario.IdUser;
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró ningún usuario con ese ID.", "Búsqueda", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LimpiarCampos();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un ID válido (número entero).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

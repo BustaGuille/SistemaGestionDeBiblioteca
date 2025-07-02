@@ -7,8 +7,7 @@ namespace BibliotecaSystem.DAO
 {
     public class LibroDAO
     {
-        static string cadenaConexion = "Server=(local)//SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
-
+        static string cadenaConexion = "Server=(local)\\SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
         public void AgregarLibro(Libro libro)
         {
             using (SqlConnection conn = new SqlConnection(cadenaConexion))

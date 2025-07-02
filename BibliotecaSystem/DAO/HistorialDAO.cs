@@ -10,8 +10,7 @@ namespace BibliotecaSystem.DAO
 {
     public class HistorialDAO
     {
-        private static string cadenaConexion = "Server=(local)\\SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
-
+        static string cadenaConexion = "Server=(local)\\SQLEXPRESS;Database=BibliotecaDB;Trusted_Connection=True;TrustServerCertificate=True";
         public void RegistrarHistorial(Historial historial)
         {
              using (SqlConnection conn = new SqlConnection(cadenaConexion))

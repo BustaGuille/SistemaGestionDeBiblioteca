@@ -126,7 +126,7 @@ namespace BibliotecaSystem.DAO
                             {
                                 IdAutor = reader.GetInt32(reader.GetOrdinal("IdAutor")),
                                 NombreAutor = reader.GetString(reader.GetOrdinal("NombreAutor")),
-                                Nacionalidad = reader.GetString(reader.GetOrdinal("Nacionalidad"))
+                                Nacionalidad = reader.IsDBNull(2) ? null : reader.GetString(2)
                             });
                         }
                     }

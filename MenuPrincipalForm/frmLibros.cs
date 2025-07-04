@@ -93,7 +93,7 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            // Validar campos obligatorios
+            // Valida campos obligatorios
             if (string.IsNullOrWhiteSpace(txtTitulo.Text) ||
                 cmbAutor.SelectedItem == null ||
                 cmbEditorial.SelectedItem == null ||
@@ -105,7 +105,7 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            // Validar que cantidad sea un numero Valido Tambien
+            // Valida que cantidad sea un numero Valido Tambien
             if (!int.TryParse(txtCantidad.Text.Trim(), out int cantidad) || cantidad < 0)
             {
                 MessageBox.Show("Ingrese una cantidad válida (mayor o igual a 0).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -195,11 +195,13 @@ namespace BibliotecaApp.UI
                 Libro libro = libroDAO.ObtenerLibroPorId(idLibro);
                 if (libro != null)
                 {
+                    idLibroSeleccionado = libro.IdLibro;
                     txtTitulo.Text = libro.Titulo;
                     cmbAutor.SelectedValue = libro.AutorId;
                     cmbEditorial.SelectedValue = libro.EditorialId;
                     cmbCategoria.SelectedValue = libro.CategoriaId;
                     cmbEstado.SelectedIndex = (int)libro.Estado;
+                    txtCantidad.Text = libro.CantidadDisponible.ToString();
                 }
                 else
                 {

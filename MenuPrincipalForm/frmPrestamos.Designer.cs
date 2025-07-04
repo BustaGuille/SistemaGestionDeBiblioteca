@@ -283,7 +283,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "frmPrestamos";
-            Text = "Prestamos";
+            Text = "formulario de Prestamos";
             ((System.ComponentModel.ISupportInitialize)dgvPrestamos).EndInit();
             ResumeLayout(false);
             PerformLayout();

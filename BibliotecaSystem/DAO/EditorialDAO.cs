@@ -108,6 +108,7 @@ namespace BibliotecaSystem.DAO
             {
                 using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
+                    conn.Open();
                     string query = "SELECT IdEditorial, NombreEditorial FROM Editoriales";
                     SqlCommand cmd = new SqlCommand(query, conn);
 

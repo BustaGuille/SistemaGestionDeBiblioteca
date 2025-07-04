@@ -265,7 +265,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "frmSocios";
-            Text = "frmSocios";
+            Text = "formulario del socio";
             ((System.ComponentModel.ISupportInitialize)dgvSocios).EndInit();
             ResumeLayout(false);
             PerformLayout();

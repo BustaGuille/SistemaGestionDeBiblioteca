@@ -89,10 +89,3 @@ CREATE TABLE Multas (
     Pagada BIT DEFAULT 0
 );
 
---PARA INSERTAR EL USUARIO ADMIN
-
-INSERT INTO Usuarios (NombreUsuario, ContraseñaHash)
-VALUES ('Admin', 'qiV2cjniGJTfHrjB4zSLGE0BzhQGDgSDjphUGwfBKQM=');
-
-
-SELECT * FROM Usuarios;

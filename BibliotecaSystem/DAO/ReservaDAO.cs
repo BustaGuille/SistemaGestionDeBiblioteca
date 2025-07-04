@@ -55,6 +55,72 @@ namespace BibliotecaSystem.DAO
             }
         }
 
+        public Reserva ObtenerReservaPorId(int id)
+        {
+            Reserva reserva = null;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
+                {
+                    conn.Open();
+                    string query = "SELECT IdReserva, IdLibro, IdSocio, FechaReserva FROM Reservas WHERE IdReserva = @IdReserva";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@IdReserva", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            reserva = new Reserva
+                            {
+                                IdReserva = reader.GetInt32(0),
+                                IdLibro = reader.GetInt32(1),
+                                IdSocio = reader.GetInt32(2),
+                                FechaReserva = reader.GetDateTime(3)
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener reserva por ID: " + ex.Message);
+            }
+
+            return reserva;
+        }
+
+        public void ModificarReserva(Reserva reserva)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = @"UPDATE Reservas 
+                             SET IdLibro = @IdLibro, 
+                                 IdSocio = @IdSocio, 
+                                 FechaReserva = @FechaReserva, 
+                                 Activa = @Activa 
+                             WHERE IdReserva = @IdReserva";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdLibro", reserva.IdLibro);
+                cmd.Parameters.AddWithValue("@IdSocio", reserva.IdSocio);
+                cmd.Parameters.AddWithValue("@FechaReserva", reserva.FechaReserva);
+                cmd.Parameters.AddWithValue("@Activa", reserva.Activa);
+                cmd.Parameters.AddWithValue("@IdReserva", reserva.IdReserva);
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ocuriio un error al modificar reserva.");
+                    throw new Exception("Error al modificar reserva" + ex.Message);
+                }
+            }
+        }
 
         public List<Reserva> ListarReservas()
         {

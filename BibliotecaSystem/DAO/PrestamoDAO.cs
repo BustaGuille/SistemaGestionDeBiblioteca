@@ -14,27 +14,43 @@ namespace BibliotecaSystem.DAO
         {
             using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                string query = @"INSERT INTO Prestamos (LibroId, UsuarioId, SocioId, FechaPrestamo, FechaDevolucion, Devuelto)
-                                     VALUES (@LibroId, @UsuarioId, @SocioId, @FechaPrestamo, @FechaDevolucion, @Devuelto)";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@LibroId", prestamo.LibroId);
-                cmd.Parameters.AddWithValue("@UsuarioId", prestamo.UsuarioId);
-                cmd.Parameters.AddWithValue("@SocioId", prestamo.SocioId);
-                cmd.Parameters.AddWithValue("@FechaPrestamo", prestamo.FechaPrestamo);
-                cmd.Parameters.AddWithValue("@FechaDevolucion", (object)prestamo.FechaDevolucion ?? DBNull.Value); //Hicimos de esta forma por que el metodo AddWithValue requiere un valor de tipo objeto
-                                                                                                                   //Agregamos una condicion en la que si FechaDevolucion es null, se agrega DBNull.Value a la consulta que es valido en SQL Server
-                cmd.Parameters.AddWithValue("@Devuelto", prestamo.Devuelto);
-                try { 
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
+                conn.Open();
+                //Se hace uno o no se hace ninguno, esto es lo que se conoce como transacción, lo hacemos por que hacemos 2 operaciones criticas
+                SqlTransaction transaction = conn.BeginTransaction(); //con esto iniciamos una transacción para asegurar que ambas operaciones (insertar préstamo y actualizar cantidad de libro) se realicen correctamente
+
+                try
+                {
+                    // Estamos insertando un nuevo préstamo en la tabla Prestamos
+                    string queryInsert = @"INSERT INTO Prestamos (LibroId, UsuarioId, SocioId, FechaPrestamo, FechaDevolucion, Devuelto)
+                                   VALUES (@LibroId, @UsuarioId, @SocioId, @FechaPrestamo, @FechaDevolucion, @Devuelto)";
+                    SqlCommand cmdInsert = new SqlCommand(queryInsert, conn, transaction);
+                    cmdInsert.Parameters.AddWithValue("@LibroId", prestamo.LibroId);
+                    cmdInsert.Parameters.AddWithValue("@UsuarioId", prestamo.UsuarioId);
+                    cmdInsert.Parameters.AddWithValue("@SocioId", prestamo.SocioId);
+                    cmdInsert.Parameters.AddWithValue("@FechaPrestamo", prestamo.FechaPrestamo);
+                    cmdInsert.Parameters.AddWithValue("@FechaDevolucion", (object)prestamo.FechaDevolucion ?? DBNull.Value);
+                    cmdInsert.Parameters.AddWithValue("@Devuelto", prestamo.Devuelto);
+
+                    cmdInsert.ExecuteNonQuery();
+
+                    // Estamos actualizando la cantidad de ejemplares del libro en la tabla Libros
+                    string queryUpdate = @"UPDATE Libros SET Cantidad = Cantidad - 1 WHERE IdLibro = @IdLibro AND Cantidad > 0"; //Actualizamos la cantidad de libros solo si hay ejemplares disponibles
+                    SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction);
+                    cmdUpdate.Parameters.AddWithValue("@IdLibro", prestamo.LibroId);
+
+                    int filasAfectadas = cmdUpdate.ExecuteNonQuery(); 
+
+                    if (filasAfectadas == 0) //Es por si no hay ejemplares disponibles del libro hacemos rollback
+                        throw new Exception("No hay ejemplares disponibles del libro.");
+
+                    transaction.Commit(); // Si es que todo sale bien se confirma la transacción
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error al registrar préstamo: " + ex.Message);
-                    throw new Exception("Ocurrio un error inesperado al registrar el prestamo: " +  ex.Message);
+                    transaction.Rollback();
+                    throw new Exception("Error al registrar el préstamo: " + ex.Message);
                 }
             }
-         
         }
 
         public void EliminarPrestamo(int idPrestamo)
@@ -117,6 +133,8 @@ namespace BibliotecaSystem.DAO
             }
             return listaPresta;
         }
+
+
         public void ModificarPrestamo(Prestamo prestamo)
         {
             try
@@ -149,6 +167,49 @@ namespace BibliotecaSystem.DAO
             {
                 throw new Exception("Ocurrió un error al modificar el préstamo: " + ex.Message);
             }
+        }
+
+        public Prestamo ObtenerPrestamoPorId(int idPrestamo)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
+                {
+                    string query = @"SELECT IdPrestamo, LibroId, UsuarioId, SocioId, FechaPrestamo, FechaDevolucion, Devuelto
+                             FROM Prestamos
+                             WHERE IdPrestamo = @IdPrestamo";
+
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@IdPrestamo", idPrestamo);
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new Prestamo
+                            {
+                                IdPrestamo = reader.GetInt32(reader.GetOrdinal("IdPrestamo")),
+                                LibroId = reader.GetInt32(reader.GetOrdinal("LibroId")),
+                                UsuarioId = reader.GetInt32(reader.GetOrdinal("UsuarioId")),
+                                SocioId = reader.GetInt32(reader.GetOrdinal("SocioId")),
+                                FechaPrestamo = reader.GetDateTime(reader.GetOrdinal("FechaPrestamo")),
+                                FechaDevolucion = reader.IsDBNull(reader.GetOrdinal("FechaDevolucion"))
+                                                  ? null
+                                                  : reader.GetDateTime(reader.GetOrdinal("FechaDevolucion")),
+                                Devuelto = reader.GetBoolean(reader.GetOrdinal("Devuelto"))
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al obtener préstamo por ID: " + ex.Message);
+                throw new Exception("Error al buscar préstamo: " + ex.Message);
+            }
+
+            return null;
         }
 
     }

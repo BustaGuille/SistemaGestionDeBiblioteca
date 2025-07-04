@@ -198,5 +198,26 @@ namespace BibliotecaSystem.DAO
 
             return lista;
         }
+
+        public void AumentarCantidadDisponible(int idLibro)
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = "UPDATE Libros SET Cantidad = Cantidad + 1 WHERE IdLibro = @IdLibro";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@IdLibro", idLibro);
+
+                try
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al aumentar cantidad de libro: " + ex.Message);
+                }
+            }
+        }
+
     }
 }

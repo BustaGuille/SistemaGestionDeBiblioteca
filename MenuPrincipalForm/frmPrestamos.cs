@@ -14,6 +14,8 @@ namespace BibliotecaApp.UI
 {
     public partial class frmPrestamos : Form
     {
+        private LibroDAO libroDAO = new LibroDAO();
+
         private PrestamoDAO prestamoDAO = new PrestamoDAO();
 
         public frmPrestamos()
@@ -36,9 +38,24 @@ namespace BibliotecaApp.UI
                 return;
             }
 
+            int idLibroSeleccionado = Convert.ToInt32(cmbLibro.SelectedValue);
+            Libro libro = libroDAO.ObtenerLibroPorId(idLibroSeleccionado);
+
+            if (libro == null)
+            {
+                MessageBox.Show("El libro seleccionado no existe.");
+                return;
+            }
+
+            if (libro.CantidadDisponible <= 0)
+            {
+                MessageBox.Show("No hay unidades disponibles del libro seleccionado.", "Sin stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Prestamo prestamo = new Prestamo
             {
-                LibroId = Convert.ToInt32(cmbLibro.SelectedValue),
+                LibroId = idLibroSeleccionado,
                 UsuarioId = Convert.ToInt32(cmbUsuario.SelectedValue),
                 SocioId = Convert.ToInt32(cmbSocio.SelectedValue),
                 FechaPrestamo = dtpFechaPrestamo.Value,
@@ -60,7 +77,16 @@ namespace BibliotecaApp.UI
             }
 
             int id = int.Parse(txtIdPrestamo.Text);
+            Prestamo prestamo = prestamoDAO.ObtenerPrestamoPorId(id);
+            if (prestamo == null)
+            {
+                MessageBox.Show("No se encontró el préstamo especificado.");
+                return;
+            }
+
             prestamoDAO.MarcarComoDevuelto(id);
+            libroDAO.AumentarCantidadDisponible(prestamo.LibroId);
+
             CargarPrestamos();
             LimpiarCampos();
         }
@@ -131,7 +157,7 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            
+
             if (cmbLibro.SelectedItem == null || cmbSocio.SelectedItem == null || cmbUsuario.SelectedItem == null)
             {
                 MessageBox.Show("Debe seleccionar un libro, un socio y un usuario.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -154,12 +180,55 @@ namespace BibliotecaApp.UI
                 prestamoDAO.ModificarPrestamo(prestamo);
 
                 MessageBox.Show("Préstamo modificado correctamente.");
-                CargarPrestamos(); 
-                LimpiarCampos();   
+                CargarPrestamos();
+                LimpiarCampos();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al modificar el préstamo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            {
+                if (string.IsNullOrWhiteSpace(txtIdPrestamo.Text))
+                {
+                    MessageBox.Show("Debe ingresar el ID del préstamo a buscar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!int.TryParse(txtIdPrestamo.Text, out int idPrestamo))
+                {
+                    MessageBox.Show("El ID del préstamo debe ser un número válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                Prestamo prestamo = prestamoDAO.ObtenerPrestamoPorId(idPrestamo);
+
+                if (prestamo == null)
+                {
+                    MessageBox.Show("No se encontró ningún préstamo con ese ID.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Si encontró, llena los campos del formulario
+                cmbLibro.SelectedValue = prestamo.LibroId;
+                cmbUsuario.SelectedValue = prestamo.UsuarioId;
+                cmbSocio.SelectedValue = prestamo.SocioId;
+                dtpFechaPrestamo.Value = prestamo.FechaPrestamo;
+
+                if (prestamo.FechaDevolucion.HasValue)
+                {
+                    dtpFechaDevolucion.Value = prestamo.FechaDevolucion.Value;
+                    dtpFechaDevolucion.Checked = true;
+                }
+                else
+                {
+                    dtpFechaDevolucion.Checked = false;
+                }
+
+                chkDevuelto.Checked = prestamo.Devuelto;
             }
         }
     }

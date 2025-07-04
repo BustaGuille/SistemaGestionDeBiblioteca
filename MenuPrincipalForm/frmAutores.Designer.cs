@@ -47,7 +47,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(28, 218);
+            label1.Location = new Point(28, 126);
             label1.Name = "label1";
             label1.Size = new Size(93, 21);
             label1.TabIndex = 0;
@@ -57,7 +57,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(28, 271);
+            label2.Location = new Point(28, 179);
             label2.Name = "label2";
             label2.Size = new Size(136, 21);
             label2.TabIndex = 1;
@@ -67,7 +67,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(28, 330);
+            label3.Location = new Point(28, 238);
             label3.Name = "label3";
             label3.Size = new Size(101, 21);
             label3.TabIndex = 2;
@@ -76,82 +76,86 @@
             // txtIdAutor
             // 
             txtIdAutor.Font = new Font("Segoe UI", 11F);
-            txtIdAutor.Location = new Point(258, 218);
+            txtIdAutor.Location = new Point(362, 126);
             txtIdAutor.Name = "txtIdAutor";
-            txtIdAutor.Size = new Size(216, 27);
+            txtIdAutor.Size = new Size(277, 27);
             txtIdAutor.TabIndex = 3;
             // 
             // txtNombreAutor
             // 
             txtNombreAutor.Font = new Font("Segoe UI", 11F);
-            txtNombreAutor.Location = new Point(258, 268);
+            txtNombreAutor.Location = new Point(362, 179);
             txtNombreAutor.Name = "txtNombreAutor";
-            txtNombreAutor.Size = new Size(216, 27);
+            txtNombreAutor.Size = new Size(277, 27);
             txtNombreAutor.TabIndex = 4;
             // 
             // txtNacionalidad
             // 
             txtNacionalidad.Font = new Font("Segoe UI", 11F);
-            txtNacionalidad.Location = new Point(258, 327);
+            txtNacionalidad.Location = new Point(362, 236);
             txtNacionalidad.Name = "txtNacionalidad";
-            txtNacionalidad.Size = new Size(216, 27);
+            txtNacionalidad.Size = new Size(277, 27);
             txtNacionalidad.TabIndex = 5;
             // 
             // btnAgregar
             // 
             btnAgregar.Font = new Font("Segoe UI", 12F);
-            btnAgregar.Location = new Point(28, 397);
+            btnAgregar.Location = new Point(12, 293);
             btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(150, 50);
+            btnAgregar.Size = new Size(627, 31);
             btnAgregar.TabIndex = 6;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
+            btnAgregar.Click += btnAgregar_Click;
             // 
             // btnModificar
             // 
             btnModificar.Font = new Font("Segoe UI", 12F);
-            btnModificar.Location = new Point(245, 397);
+            btnModificar.Location = new Point(12, 367);
             btnModificar.Name = "btnModificar";
-            btnModificar.Size = new Size(150, 50);
+            btnModificar.Size = new Size(627, 31);
             btnModificar.TabIndex = 7;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = true;
+            btnModificar.Click += btnModificar_Click;
             // 
             // btnEliminar
             // 
             btnEliminar.Font = new Font("Segoe UI", 12F);
-            btnEliminar.Location = new Point(469, 397);
+            btnEliminar.Location = new Point(12, 330);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(150, 50);
+            btnEliminar.Size = new Size(627, 31);
             btnEliminar.TabIndex = 8;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnLimpiar
             // 
             btnLimpiar.Font = new Font("Segoe UI", 12F);
-            btnLimpiar.Location = new Point(703, 397);
+            btnLimpiar.Location = new Point(12, 404);
             btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(150, 50);
+            btnLimpiar.Size = new Size(627, 31);
             btnLimpiar.TabIndex = 9;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // dgvAutores
             // 
             dgvAutores.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvAutores.Location = new Point(28, 618);
+            dgvAutores.Location = new Point(12, 465);
             dgvAutores.Name = "dgvAutores";
-            dgvAutores.Size = new Size(848, 319);
+            dgvAutores.Size = new Size(627, 207);
             dgvAutores.TabIndex = 12;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 30F);
-            label4.Location = new Point(130, 86);
+            label4.Font = new Font("Segoe UI", 20F);
+            label4.Location = new Point(28, 29);
             label4.Name = "label4";
-            label4.Size = new Size(647, 54);
+            label4.Size = new Size(434, 37);
             label4.TabIndex = 13;
             label4.Text = "Bienvenido al fomulario de Autores";
             // 
@@ -159,7 +163,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(887, 1024);
+            ClientSize = new Size(651, 705);
             Controls.Add(label4);
             Controls.Add(dgvAutores);
             Controls.Add(btnLimpiar);
@@ -173,7 +177,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "frmAutores";
-            Text = "Autores";
+            Text = "formulario de Autores";
             ((System.ComponentModel.ISupportInitialize)dgvAutores).EndInit();
             ResumeLayout(false);
             PerformLayout();

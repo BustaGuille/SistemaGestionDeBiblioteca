@@ -14,10 +14,11 @@ namespace BibliotecaApp.UI
 {
     public partial class frmLibros : Form
     {
+        private int? idLibroSeleccionado = null;
         private LibroDAO libroDAO = new LibroDAO();
         private AutorDAO autorDAO = new AutorDAO();
         private EditorialDAO editorialDAO = new EditorialDAO();
-        private CategoriaDAO categoriaDAO = new CategoriaDAO(); 
+        private CategoriaDAO categoriaDAO = new CategoriaDAO();
 
         public frmLibros()
         {
@@ -50,53 +51,108 @@ namespace BibliotecaApp.UI
         }
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            Libro nuevo = new Libro
+            if (string.IsNullOrWhiteSpace(txtTitulo.Text) ||
+                cmbAutor.SelectedItem == null ||
+                cmbEditorial.SelectedItem == null ||
+                cmbCategoria.SelectedItem == null ||
+                cmbEstado.SelectedItem == null ||
+                string.IsNullOrWhiteSpace(txtCantidad.Text))
             {
-                Titulo = txtTitulo.Text,
-                AutorId = Convert.ToInt32(cmbAutor.SelectedValue),
-                //AutorId = (int)cmbAutor.SelectedValue,
-                EditorialId = Convert.ToInt32(cmbEditorial.SelectedValue),
-                //EditorialId = (int)cmbEditorial.SelectedValue,
-                CategoriaId = Convert.ToInt32(cmbCategoria.SelectedValue),
-                //CategoriaId = (int)cmbCategoria.SelectedValue,
-                Estado = (EstadoDeLibroEnum)cmbEstado.SelectedItem
-            };
+                MessageBox.Show("Por favor complete todos los campos obligatorios.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            libroDAO.AgregarLibro(nuevo);
-            CargarLibros();
-            LimpiarCampos();
+            try
+            {
+                Libro nuevoLibro = new Libro
+                {
+                    Titulo = txtTitulo.Text.Trim(),
+                    AutorId = ((Autor)cmbAutor.SelectedItem).IdAutor,
+                    EditorialId = ((Editorial)cmbEditorial.SelectedItem).IdEditorial,
+                    CategoriaId = ((Categoria)cmbCategoria.SelectedItem).IdCategoria,
+                    Estado = (EstadoDeLibroEnum)cmbEstado.SelectedItem,
+                    CantidadDisponible = int.Parse(txtCantidad.Text.Trim())
+                };
+
+                libroDAO.AgregarLibro(nuevoLibro);
+                MessageBox.Show("Libro agregado correctamente.");
+                CargarLibros();
+                LimpiarCampos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al agregar el libro: " + ex.Message);
+            }
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIDLibro.Text)) return;
-
-            Libro modificado = new Libro
+            if (string.IsNullOrWhiteSpace(txtIdLibro.Text))
             {
-                IdLibro = int.Parse(txtIDLibro.Text),
-                Titulo = txtTitulo.Text,
-                AutorId = Convert.ToInt32(cmbAutor.SelectedValue),
-                //AutorId = (int)cmbAutor.SelectedValue,
-                EditorialId = Convert.ToInt32(cmbEditorial.SelectedValue),
-                //EditorialId = (int)cmbEditorial.SelectedValue,
-                CategoriaId = Convert.ToInt32(cmbCategoria.SelectedValue),
-                //CategoriaId = (int)cmbCategoria.SelectedValue,
-                Estado = (EstadoDeLibroEnum)cmbEstado.SelectedItem
+                MessageBox.Show("Debe buscar un libro antes de modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validar campos obligatorios
+            if (string.IsNullOrWhiteSpace(txtTitulo.Text) ||
+                cmbAutor.SelectedItem == null ||
+                cmbEditorial.SelectedItem == null ||
+                cmbCategoria.SelectedItem == null ||
+                cmbEstado.SelectedItem == null ||
+                string.IsNullOrWhiteSpace(txtCantidad.Text))
+            {
+                MessageBox.Show("Debe completar todos los campos obligatorios.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validar que cantidad sea un numero Valido Tambien
+            if (!int.TryParse(txtCantidad.Text.Trim(), out int cantidad) || cantidad < 0)
+            {
+                MessageBox.Show("Ingrese una cantidad válida (mayor o igual a 0).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Creamos un objeto del libro modificado
+            Libro libro = new Libro
+            {
+                IdLibro = int.Parse(txtIdLibro.Text),
+                Titulo = txtTitulo.Text.Trim(),
+                AutorId = (int)cmbAutor.SelectedValue,
+                EditorialId = (int)cmbEditorial.SelectedValue,
+                CategoriaId = (int)cmbCategoria.SelectedValue,
+                Estado = (EstadoDeLibroEnum)cmbEstado.SelectedItem,
+                CantidadDisponible = cantidad
             };
 
-            libroDAO.ModificarLibro(modificado);
-            CargarLibros();
-            LimpiarCampos();
+            try
+            {
+                libroDAO.ModificarLibro(libro);
+                MessageBox.Show("Libro modificado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CargarLibros();
+                LimpiarCampos();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al modificar el libro: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIDLibro.Text)) return;
+            if (idLibroSeleccionado == null)
+            {
+                MessageBox.Show("Debe buscar un libro antes de eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            int id = int.Parse(txtIDLibro.Text);
-            libroDAO.EliminarLibro(id);
-            CargarLibros();
-            LimpiarCampos();
+            DialogResult confirmacion = MessageBox.Show("¿Está seguro que desea eliminar este libro?", "Confirmar eliminación", MessageBoxButtons.YesNo);
+            if (confirmacion == DialogResult.Yes)
+            {
+                libroDAO.EliminarLibro(idLibroSeleccionado.Value);
+                MessageBox.Show("Libro eliminado.");
+                CargarLibros(); // Si tenés un DataGridView
+                LimpiarCampos();
+            }
         }
 
         private void dgvLibros_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -104,7 +160,7 @@ namespace BibliotecaApp.UI
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow fila = dgvLibros.Rows[e.RowIndex];
-                txtIDLibro.Text = fila.Cells["IdLibro"].Value.ToString();
+                txtIdLibro.Text = fila.Cells["IdLibro"].Value.ToString();
                 txtTitulo.Text = fila.Cells["Titulo"].Value.ToString();
                 cmbAutor.SelectedValue = fila.Cells["AutorId"].Value;
                 cmbEditorial.SelectedValue = fila.Cells["EditorialId"].Value;
@@ -115,22 +171,46 @@ namespace BibliotecaApp.UI
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            txtIDLibro.Text = "";
-            txtTitulo.Text = "";
-            cmbAutor.SelectedIndex = 0;
-            cmbEditorial.SelectedIndex = 0;
-            cmbCategoria.SelectedIndex = 0;
-            cmbEstado.SelectedIndex = 0;
+            LimpiarCampos();
         }
 
         private void LimpiarCampos()
         {
-            txtIDLibro.Text = "";
+            txtIdLibro.Text = "";
             txtTitulo.Text = "";
-            cmbAutor.SelectedIndex = 0;
-            cmbEditorial.SelectedIndex = 0;
-            cmbCategoria.SelectedIndex = 0;
-            cmbEstado.SelectedIndex = 0;
+          
+
+            if (cmbAutor.Items.Count > 0) cmbAutor.SelectedIndex = -1;
+            if (cmbEditorial.Items.Count > 0) cmbEditorial.SelectedIndex = -1;
+            if (cmbCategoria.Items.Count > 0) cmbCategoria.SelectedIndex = -1;
+            if (cmbEstado.Items.Count > 0) cmbEstado.SelectedIndex = -1;
+
+            idLibroSeleccionado = null;
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(txtIdLibro.Text.Trim(), out int idLibro))
+            {
+                Libro libro = libroDAO.ObtenerLibroPorId(idLibro);
+                if (libro != null)
+                {
+                    txtTitulo.Text = libro.Titulo;
+                    cmbAutor.SelectedValue = libro.AutorId;
+                    cmbEditorial.SelectedValue = libro.EditorialId;
+                    cmbCategoria.SelectedValue = libro.CategoriaId;
+                    cmbEstado.SelectedIndex = (int)libro.Estado;
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró un libro con ese ID.");
+                    LimpiarCampos();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un ID válido.");
+            }
         }
     }
 }

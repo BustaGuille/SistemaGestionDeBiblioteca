@@ -43,7 +43,7 @@
             dtpFechaDevolucion = new DateTimePicker();
             chkDevuelto = new CheckBox();
             button1 = new Button();
-            button2 = new Button();
+            btnModificar = new Button();
             button3 = new Button();
             button4 = new Button();
             button5 = new Button();
@@ -56,7 +56,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F);
-            label1.Location = new Point(52, 119);
+            label1.Location = new Point(52, 102);
             label1.Name = "label1";
             label1.Size = new Size(95, 21);
             label1.TabIndex = 0;
@@ -66,7 +66,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(52, 187);
+            label2.Location = new Point(52, 152);
             label2.Name = "label2";
             label2.Size = new Size(46, 21);
             label2.TabIndex = 1;
@@ -76,7 +76,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(52, 245);
+            label3.Location = new Point(52, 210);
             label3.Name = "label3";
             label3.Size = new Size(64, 21);
             label3.TabIndex = 2;
@@ -86,7 +86,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F);
-            label4.Location = new Point(52, 302);
+            label4.Location = new Point(52, 267);
             label4.Name = "label4";
             label4.Size = new Size(48, 21);
             label4.TabIndex = 3;
@@ -96,7 +96,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F);
-            label5.Location = new Point(52, 354);
+            label5.Location = new Point(52, 319);
             label5.Name = "label5";
             label5.Size = new Size(145, 21);
             label5.TabIndex = 4;
@@ -106,7 +106,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 12F);
-            label6.Location = new Point(52, 409);
+            label6.Location = new Point(52, 374);
             label6.Name = "label6";
             label6.Size = new Size(167, 21);
             label6.TabIndex = 5;
@@ -116,7 +116,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 12F);
-            label7.Location = new Point(52, 454);
+            label7.Location = new Point(52, 419);
             label7.Name = "label7";
             label7.Size = new Size(126, 21);
             label7.TabIndex = 6;
@@ -125,25 +125,25 @@
             // txtIdPrestamo
             // 
             txtIdPrestamo.Font = new Font("Segoe UI", 11F);
-            txtIdPrestamo.Location = new Point(225, 119);
+            txtIdPrestamo.Location = new Point(225, 96);
             txtIdPrestamo.Name = "txtIdPrestamo";
-            txtIdPrestamo.Size = new Size(274, 27);
+            txtIdPrestamo.Size = new Size(278, 27);
             txtIdPrestamo.TabIndex = 7;
             // 
             // cmbLibro
             // 
             cmbLibro.Font = new Font("Segoe UI", 11F);
             cmbLibro.FormattingEnabled = true;
-            cmbLibro.Location = new Point(225, 187);
+            cmbLibro.Location = new Point(225, 152);
             cmbLibro.Name = "cmbLibro";
-            cmbLibro.Size = new Size(274, 28);
+            cmbLibro.Size = new Size(278, 28);
             cmbLibro.TabIndex = 8;
             // 
             // cmbUsuario
             // 
             cmbUsuario.Font = new Font("Segoe UI", 11F);
             cmbUsuario.FormattingEnabled = true;
-            cmbUsuario.Location = new Point(225, 245);
+            cmbUsuario.Location = new Point(225, 210);
             cmbUsuario.Name = "cmbUsuario";
             cmbUsuario.Size = new Size(278, 28);
             cmbUsuario.TabIndex = 9;
@@ -152,32 +152,32 @@
             // 
             cmbSocio.Font = new Font("Segoe UI", 11F);
             cmbSocio.FormattingEnabled = true;
-            cmbSocio.Location = new Point(225, 303);
+            cmbSocio.Location = new Point(225, 268);
             cmbSocio.Name = "cmbSocio";
-            cmbSocio.Size = new Size(274, 28);
+            cmbSocio.Size = new Size(278, 28);
             cmbSocio.TabIndex = 10;
             // 
             // dtpFechaPrestamo
             // 
             dtpFechaPrestamo.Font = new Font("Segoe UI", 11F);
-            dtpFechaPrestamo.Location = new Point(225, 354);
+            dtpFechaPrestamo.Location = new Point(225, 319);
             dtpFechaPrestamo.Name = "dtpFechaPrestamo";
-            dtpFechaPrestamo.Size = new Size(274, 27);
+            dtpFechaPrestamo.Size = new Size(278, 27);
             dtpFechaPrestamo.TabIndex = 11;
             // 
             // dtpFechaDevolucion
             // 
             dtpFechaDevolucion.Font = new Font("Segoe UI", 11F);
-            dtpFechaDevolucion.Location = new Point(225, 409);
+            dtpFechaDevolucion.Location = new Point(225, 374);
             dtpFechaDevolucion.Name = "dtpFechaDevolucion";
-            dtpFechaDevolucion.Size = new Size(274, 27);
+            dtpFechaDevolucion.Size = new Size(278, 27);
             dtpFechaDevolucion.TabIndex = 12;
             // 
             // chkDevuelto
             // 
             chkDevuelto.AutoSize = true;
             chkDevuelto.Font = new Font("Segoe UI", 11F);
-            chkDevuelto.Location = new Point(225, 454);
+            chkDevuelto.Location = new Point(225, 419);
             chkDevuelto.Name = "chkDevuelto";
             chkDevuelto.Size = new Size(88, 24);
             chkDevuelto.TabIndex = 13;
@@ -187,49 +187,53 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI", 12F);
-            button1.Location = new Point(28, 568);
+            button1.Location = new Point(12, 484);
             button1.Name = "button1";
-            button1.Size = new Size(150, 50);
+            button1.Size = new Size(536, 29);
             button1.TabIndex = 14;
             button1.Text = "Registrar préstamo";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += btnRegistrar_Click;
             // 
-            // button2
+            // btnModificar
             // 
-            button2.Font = new Font("Segoe UI", 12F);
-            button2.Location = new Point(207, 568);
-            button2.Name = "button2";
-            button2.Size = new Size(150, 50);
-            button2.TabIndex = 15;
-            button2.Text = "Modificar préstamo";
-            button2.UseVisualStyleBackColor = true;
+            btnModificar.Font = new Font("Segoe UI", 12F);
+            btnModificar.Location = new Point(12, 519);
+            btnModificar.Name = "btnModificar";
+            btnModificar.Size = new Size(536, 29);
+            btnModificar.TabIndex = 15;
+            btnModificar.Text = "Modificar préstamo";
+            btnModificar.UseVisualStyleBackColor = true;
+            btnModificar.Click += btnModificar_Click;
             // 
             // button3
             // 
             button3.Font = new Font("Segoe UI", 12F);
-            button3.Location = new Point(398, 568);
+            button3.Location = new Point(12, 554);
             button3.Name = "button3";
-            button3.Size = new Size(150, 50);
+            button3.Size = new Size(536, 29);
             button3.TabIndex = 16;
             button3.Text = "Eliminar préstamo";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += btnEliminar_Click;
             // 
             // button4
             // 
             button4.Font = new Font("Segoe UI", 12F);
-            button4.Location = new Point(598, 568);
+            button4.Location = new Point(12, 589);
             button4.Name = "button4";
-            button4.Size = new Size(150, 50);
+            button4.Size = new Size(536, 29);
             button4.TabIndex = 17;
             button4.Text = "Marcar como devuelto";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += btnMarcarDevuelto_Click;
             // 
             // button5
             // 
             button5.Font = new Font("Segoe UI", 12F);
-            button5.Location = new Point(782, 568);
+            button5.Location = new Point(12, 624);
             button5.Name = "button5";
-            button5.Size = new Size(150, 50);
+            button5.Size = new Size(536, 29);
             button5.TabIndex = 18;
             button5.Text = "Limpiar";
             button5.UseVisualStyleBackColor = true;
@@ -237,18 +241,18 @@
             // dgvPrestamos
             // 
             dgvPrestamos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPrestamos.Location = new Point(225, 687);
+            dgvPrestamos.Location = new Point(52, 659);
             dgvPrestamos.Name = "dgvPrestamos";
-            dgvPrestamos.Size = new Size(240, 150);
+            dgvPrestamos.Size = new Size(447, 150);
             dgvPrestamos.TabIndex = 19;
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 30F);
-            label8.Location = new Point(107, 26);
+            label8.Font = new Font("Segoe UI", 20F);
+            label8.Location = new Point(42, 22);
             label8.Name = "label8";
-            label8.Size = new Size(708, 54);
+            label8.Size = new Size(476, 37);
             label8.TabIndex = 20;
             label8.Text = "bienvenido al formulario de prestamos";
             // 
@@ -256,13 +260,13 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1148, 932);
+            ClientSize = new Size(557, 822);
             Controls.Add(label8);
             Controls.Add(dgvPrestamos);
             Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(button3);
-            Controls.Add(button2);
+            Controls.Add(btnModificar);
             Controls.Add(button1);
             Controls.Add(chkDevuelto);
             Controls.Add(dtpFechaDevolucion);
@@ -279,7 +283,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "frmPrestamos";
-            Text = "Prestamos";
+            Text = "formulario de Prestamos";
             ((System.ComponentModel.ISupportInitialize)dgvPrestamos).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -302,7 +306,7 @@
         private DateTimePicker dtpFechaDevolucion;
         private CheckBox chkDevuelto;
         private Button button1;
-        private Button button2;
+        private Button btnModificar;
         private Button button3;
         private Button button4;
         private Button button5;

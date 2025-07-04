@@ -30,6 +30,11 @@ namespace BibliotecaApp.UI
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtNombreAutor.Text) || string.IsNullOrWhiteSpace(txtNacionalidad.Text))
+            {
+                MessageBox.Show("Debe completar todos los campos antes de agregar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             Autor nuevo = new Autor
             {
                 NombreAutor = txtNombreAutor.Text,
@@ -43,7 +48,17 @@ namespace BibliotecaApp.UI
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIdAutor.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtIdAutor.Text))
+            {
+                MessageBox.Show("Debe buscar un autor antes de modificar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNombreAutor.Text) || string.IsNullOrWhiteSpace(txtNacionalidad.Text))
+            {
+                MessageBox.Show("Debe completar todos los campos antes de modificar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             Autor modificado = new Autor
             {
@@ -59,12 +74,20 @@ namespace BibliotecaApp.UI
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIdAutor.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtIdAutor.Text))
+            {
+                MessageBox.Show("Debe buscar un autor antes de eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            int id = int.Parse(txtIdAutor.Text);
-            autorDAO.EliminarAutor(id);
-            CargarAutores();
-            LimpiarCampos();
+            DialogResult confirmacion = MessageBox.Show("¿Está seguro que desea eliminar este autor?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmacion == DialogResult.Yes)
+            {
+                int id = int.Parse(txtIdAutor.Text);
+                autorDAO.EliminarAutor(id);
+                CargarAutores();
+                LimpiarCampos();
+            }
         }
 
         private void dgvAutores_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -83,6 +106,11 @@ namespace BibliotecaApp.UI
             txtIdAutor.Text = "";
             txtNombreAutor.Text = "";
             txtNacionalidad.Text = "";
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
         }
     }
 }

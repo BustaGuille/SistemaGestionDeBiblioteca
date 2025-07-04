@@ -62,7 +62,7 @@ namespace BibliotecaSystem.DAO
         public void MarcarComoDevuelto(int idPrestamo)
         {
         
-            using (SqlConnection conn = new SqlConnection())
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
                 string query = "UPDATE Prestamos SET Devuelto = 1 WHERE IdPrestamo = @IdPrestamo";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -85,7 +85,7 @@ namespace BibliotecaSystem.DAO
         {
             List<Prestamo> listaPresta = new List<Prestamo>();
 
-                using (SqlConnection conn = new SqlConnection())
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
                     string query = "SELECT IdPrestamo, LibroId, UsuarioId, SocioId, FechaPrestamo, FechaDevolucion, Devuelto FROM Prestamos";
                     SqlCommand cmd = new SqlCommand(query, conn);
@@ -117,5 +117,39 @@ namespace BibliotecaSystem.DAO
             }
             return listaPresta;
         }
+        public void ModificarPrestamo(Prestamo prestamo)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
+                {
+                    string query = @"UPDATE Prestamos 
+                                 SET LibroId = @LibroId, 
+                                     UsuarioId = @UsuarioId,
+                                     SocioId = @SocioId,
+                                     FechaPrestamo = @FechaPrestamo,
+                                     FechaDevolucion = @FechaDevolucion,
+                                     Devuelto = @Devuelto
+                                 WHERE IdPrestamo = @IdPrestamo";
+
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@LibroId", prestamo.LibroId);
+                    cmd.Parameters.AddWithValue("@UsuarioId", prestamo.UsuarioId);
+                    cmd.Parameters.AddWithValue("@SocioId", prestamo.SocioId);
+                    cmd.Parameters.AddWithValue("@FechaPrestamo", prestamo.FechaPrestamo);
+                    cmd.Parameters.AddWithValue("@FechaDevolucion", (object)prestamo.FechaDevolucion ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Devuelto", prestamo.Devuelto);
+                    cmd.Parameters.AddWithValue("@IdPrestamo", prestamo.IdPrestamo);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocurrió un error al modificar el préstamo: " + ex.Message);
+            }
+        }
+
     }
 }

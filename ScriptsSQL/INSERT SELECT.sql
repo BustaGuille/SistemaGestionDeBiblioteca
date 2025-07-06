@@ -21,7 +21,7 @@ VALUES ('Libro de Prueba', 1, 1, 1, 1, 10);
 INSERT INTO Socios (NombreSocio, CedulaSocio, Direccion, TelefonoSocio, Email)
 VALUES ('Juan Pérez', '12345678', 'Calle Falsa 123', '0981122334', 'juanperez@email.com');
 
-SELECT * FROM Socios;
+SELECT * FROM Libros;
 
 SELECT * FROM Autores;
 UPDATE Autores

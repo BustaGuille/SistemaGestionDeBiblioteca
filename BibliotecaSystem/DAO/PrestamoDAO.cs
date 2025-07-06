@@ -1,7 +1,8 @@
 ﻿using BibliotecaSystem.Entidades;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace BibliotecaSystem.DAO
 {
@@ -97,42 +98,7 @@ namespace BibliotecaSystem.DAO
             }
         }
 
-        public List<Prestamo> ObtenerTodosLosPrestamos()
-        {
-            List<Prestamo> listaPresta = new List<Prestamo>();
-
-                using (SqlConnection conn = new SqlConnection(cadenaConexion))
-                {
-                    string query = "SELECT IdPrestamo, LibroId, UsuarioId, SocioId, FechaPrestamo, FechaDevolucion, Devuelto FROM Prestamos";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                try
-                {
-                    conn.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                        
-                    while (reader.Read())
-                    {
-                        listaPresta.Add(new Prestamo
-                        {
-                            IdPrestamo = reader.GetInt32(0),
-                            LibroId = reader.GetInt32(1),
-                            UsuarioId = reader.GetInt32(2),
-                            SocioId = reader.GetInt32(3),
-                            FechaPrestamo = reader.GetDateTime(4),
-                            FechaDevolucion = reader.IsDBNull(5) ? null : reader.GetDateTime(5), //Se verifica si la columna en la posición 5 es DBNull antes de obtener el valor
-                                                                                                 //Si es null la propiedad FechaDevolucion se asigna como null, de lo contrario obtenemos el valor de la columna
-                            Devuelto = reader.GetBoolean(6)
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error al obtener préstamos: " + ex.Message);
-                    throw new Exception("Ocurrio un error inesperado al obtener los prestamos: " + ex.Message);
-                }
-            }
-            return listaPresta;
-        }
+       
 
 
         public void ModificarPrestamo(Prestamo prestamo)
@@ -211,6 +177,41 @@ namespace BibliotecaSystem.DAO
 
             return null;
         }
+
+        public DataTable ObtenerTodosLosPrestamos()
+        {
+            using (SqlConnection conn = new SqlConnection(cadenaConexion))
+            {
+                string query = @"
+            SELECT 
+                p.IdPrestamo,
+                l.Titulo AS NombreLibro,
+                u.NombreUsuario,
+                s.NombreSocio,
+                p.FechaPrestamo,
+                p.FechaDevolucion,
+                p.Devuelto
+            FROM Prestamos p
+            INNER JOIN Libros l ON p.LibroId = l.IdLibro
+            INNER JOIN Usuarios u ON p.UsuarioId = u.IdUser
+            INNER JOIN Socios s ON p.SocioId = s.IdSocio";
+
+                SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                DataTable tabla = new DataTable();
+
+                try
+                {
+                    adapter.Fill(tabla);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al obtener los préstamos: " + ex.Message);
+                }
+
+                return tabla;
+            }
+        }
+
 
     }
 }

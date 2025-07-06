@@ -89,3 +89,4 @@ CREATE TABLE Multas (
     Pagada BIT DEFAULT 0
 );
 
+SELECT * FROM Multas;

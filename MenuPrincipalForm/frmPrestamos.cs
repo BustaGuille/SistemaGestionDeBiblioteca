@@ -18,10 +18,17 @@ namespace BibliotecaApp.UI
 
         private PrestamoDAO prestamoDAO = new PrestamoDAO();
 
+        private SocioDAO socioDAO = new SocioDAO();
+
+        private UsuarioDAO usuarioDAO = new UsuarioDAO();
+
         public frmPrestamos()
         {
             InitializeComponent();
             CargarPrestamos();
+            CargarSocios();
+            CargarUsuarios();
+            CargarLibros();
         }
 
         private void CargarPrestamos()
@@ -47,7 +54,7 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            if (libro.CantidadDisponible <= 0)
+            if (libro.Cantidad <= 0)
             {
                 MessageBox.Show("No hay unidades disponibles del libro seleccionado.", "Sin stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -115,11 +122,11 @@ namespace BibliotecaApp.UI
             {
                 var fila = dgvPrestamos.Rows[e.RowIndex];
                 txtIdPrestamo.Text = fila.Cells["IdPrestamo"].Value.ToString();
-                cmbLibro.SelectedValue = fila.Cells["LibroId"].Value;
+                cmbLibro.SelectedValue = fila.Cells["NombreLibro"].Value;
                 //cmbLibro.Text = fila.Cells["LibroId"].Value.ToString();
-                cmbUsuario.SelectedValue = fila.Cells["UsuarioId"].Value;
+                cmbUsuario.SelectedValue = fila.Cells["NombreUsuario"].Value;
                 //cmbUsuario.Text = fila.Cells["UsuarioId"].Value.ToString();
-                cmbSocio.SelectedValue = fila.Cells["SocioId"].Value;
+                cmbSocio.SelectedValue = fila.Cells["NombreSocio"].Value;
                 //cmbSocio.Text = fila.Cells["SocioId"].Value.ToString();
                 dtpFechaPrestamo.Value = Convert.ToDateTime(fila.Cells["FechaPrestamo"].Value);
 
@@ -231,6 +238,35 @@ namespace BibliotecaApp.UI
                 chkDevuelto.Checked = prestamo.Devuelto;
             }
         }
+        private void CargarSocios()
+        {
+            var listaSocios = socioDAO.ListarSocios();
+
+            cmbSocio.DataSource = listaSocios;
+            cmbSocio.DisplayMember = "NombreSocio";
+            cmbSocio.ValueMember = "IdSocio";
+            cmbSocio.SelectedIndex = -1;
+        }
+
+        private void CargarLibros()
+        {
+            var listaLibros = libroDAO.ListarLibrosDisponibles();
+
+            cmbLibro.DataSource = listaLibros;
+            cmbLibro.DisplayMember = "Titulo";     
+            cmbLibro.ValueMember = "IdLibro";        
+            cmbLibro.SelectedIndex = -1;             
+        }
+
+        private void CargarUsuarios()
+        {
+            var usuarios = usuarioDAO.ListarUsuarios();
+            cmbUsuario.DataSource = usuarios;
+            cmbUsuario.DisplayMember = "NombreUsuario";
+            cmbUsuario.ValueMember = "IdUser";
+            cmbUsuario.SelectedIndex = -1;
+        }
+
     }
 }
 

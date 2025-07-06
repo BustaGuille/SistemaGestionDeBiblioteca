@@ -74,6 +74,8 @@ namespace BibliotecaSystem.DAO
             {
                 using (SqlConnection conn = new SqlConnection(cadenaConexion))
                 {
+                    conn.Open();
+
                     string query = "SELECT IdEditorial, NombreEditorial FROM Editoriales WHERE IdEditorial = @IdEditorial";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@IdEditorial", idEditorial);
@@ -99,6 +101,7 @@ namespace BibliotecaSystem.DAO
 
             return null;
         }
+
 
         public List<Editorial> ListarEditoriales()
         {

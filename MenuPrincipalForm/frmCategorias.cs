@@ -19,6 +19,7 @@ namespace BibliotecaApp.UI
         public frmCategorias()
         {
             InitializeComponent();
+            CargarCategorias();
         }
 
         private void CargarCategorias()
@@ -29,9 +30,15 @@ namespace BibliotecaApp.UI
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtNombreCategoria.Text))
+            {
+                MessageBox.Show("Debe ingresar un nombre para la categoría.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Categoria nueva = new Categoria
             {
-                NombreCategoria = txtNombreCategoria.Text
+                NombreCategoria = txtNombreCategoria.Text.Trim()
             };
 
             categoriaDAO.AgregarCategoria(nueva);
@@ -41,22 +48,30 @@ namespace BibliotecaApp.UI
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIdCategoria.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtIdCategoria.Text))
+            {
+                MessageBox.Show("Debe ingresar el ID de la categoría que desea modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            Categoria modificada = new Categoria
+            Categoria cat = new Categoria
             {
                 IdCategoria = int.Parse(txtIdCategoria.Text),
-                NombreCategoria = txtNombreCategoria.Text
+                NombreCategoria = txtNombreCategoria.Text.Trim()
             };
 
-            categoriaDAO.ModificarCategoria(modificada);
+            categoriaDAO.ModificarCategoria(cat);
             CargarCategorias();
             LimpiarCampos();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIdCategoria.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtIdCategoria.Text))
+            {
+                MessageBox.Show("Debe ingresar el ID de la categoría que desea eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             int id = int.Parse(txtIdCategoria.Text);
             categoriaDAO.EliminarCategoria(id);
@@ -83,6 +98,28 @@ namespace BibliotecaApp.UI
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtIdCategoria.Text))
+            {
+                MessageBox.Show("Ingrese un ID de categoría para buscar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int id = int.Parse(txtIdCategoria.Text);
+            Categoria cat = categoriaDAO.ObtenerCategoriaPorId(id);
+
+            if (cat != null)
+            {
+                txtNombreCategoria.Text = cat.NombreCategoria;
+            }
+            else
+            {
+                MessageBox.Show("Categoría no encontrada.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarCampos();
+            }
         }
     }
 }

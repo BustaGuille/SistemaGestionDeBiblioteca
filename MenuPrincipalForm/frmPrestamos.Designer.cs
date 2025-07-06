@@ -67,7 +67,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(22, 208);
+            label2.Location = new Point(18, 203);
             label2.Name = "label2";
             label2.Size = new Size(57, 28);
             label2.TabIndex = 1;
@@ -77,7 +77,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(18, 285);
+            label3.Location = new Point(18, 267);
             label3.Name = "label3";
             label3.Size = new Size(79, 28);
             label3.TabIndex = 2;
@@ -87,7 +87,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F);
-            label4.Location = new Point(18, 357);
+            label4.Location = new Point(22, 329);
             label4.Name = "label4";
             label4.Size = new Size(61, 28);
             label4.TabIndex = 3;
@@ -97,7 +97,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F);
-            label5.Location = new Point(18, 429);
+            label5.Location = new Point(22, 389);
             label5.Name = "label5";
             label5.Size = new Size(181, 28);
             label5.TabIndex = 4;
@@ -107,7 +107,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 12F);
-            label6.Location = new Point(18, 502);
+            label6.Location = new Point(22, 444);
             label6.Name = "label6";
             label6.Size = new Size(211, 28);
             label6.TabIndex = 5;
@@ -117,7 +117,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 12F);
-            label7.Location = new Point(18, 559);
+            label7.Location = new Point(22, 504);
             label7.Name = "label7";
             label7.Size = new Size(159, 28);
             label7.TabIndex = 6;
@@ -136,7 +136,7 @@
             // 
             cmbLibro.Font = new Font("Segoe UI", 11F);
             cmbLibro.FormattingEnabled = true;
-            cmbLibro.Location = new Point(235, 206);
+            cmbLibro.Location = new Point(235, 203);
             cmbLibro.Margin = new Padding(3, 4, 3, 4);
             cmbLibro.Name = "cmbLibro";
             cmbLibro.Size = new Size(317, 33);
@@ -146,7 +146,7 @@
             // 
             cmbUsuario.Font = new Font("Segoe UI", 11F);
             cmbUsuario.FormattingEnabled = true;
-            cmbUsuario.Location = new Point(235, 283);
+            cmbUsuario.Location = new Point(235, 262);
             cmbUsuario.Margin = new Padding(3, 4, 3, 4);
             cmbUsuario.Name = "cmbUsuario";
             cmbUsuario.Size = new Size(317, 33);
@@ -156,7 +156,7 @@
             // 
             cmbSocio.Font = new Font("Segoe UI", 11F);
             cmbSocio.FormattingEnabled = true;
-            cmbSocio.Location = new Point(235, 360);
+            cmbSocio.Location = new Point(235, 324);
             cmbSocio.Margin = new Padding(3, 4, 3, 4);
             cmbSocio.Name = "cmbSocio";
             cmbSocio.Size = new Size(317, 33);
@@ -165,7 +165,7 @@
             // dtpFechaPrestamo
             // 
             dtpFechaPrestamo.Font = new Font("Segoe UI", 11F);
-            dtpFechaPrestamo.Location = new Point(235, 428);
+            dtpFechaPrestamo.Location = new Point(235, 385);
             dtpFechaPrestamo.Margin = new Padding(3, 4, 3, 4);
             dtpFechaPrestamo.Name = "dtpFechaPrestamo";
             dtpFechaPrestamo.Size = new Size(317, 32);
@@ -174,7 +174,7 @@
             // dtpFechaDevolucion
             // 
             dtpFechaDevolucion.Font = new Font("Segoe UI", 11F);
-            dtpFechaDevolucion.Location = new Point(235, 502);
+            dtpFechaDevolucion.Location = new Point(235, 444);
             dtpFechaDevolucion.Margin = new Padding(3, 4, 3, 4);
             dtpFechaDevolucion.Name = "dtpFechaDevolucion";
             dtpFechaDevolucion.Size = new Size(317, 32);
@@ -184,7 +184,7 @@
             // 
             chkDevuelto.AutoSize = true;
             chkDevuelto.Font = new Font("Segoe UI", 11F);
-            chkDevuelto.Location = new Point(235, 562);
+            chkDevuelto.Location = new Point(235, 506);
             chkDevuelto.Margin = new Padding(3, 4, 3, 4);
             chkDevuelto.Name = "chkDevuelto";
             chkDevuelto.Size = new Size(109, 29);
@@ -195,7 +195,7 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI", 12F);
-            button1.Location = new Point(14, 645);
+            button1.Location = new Point(12, 543);
             button1.Margin = new Padding(3, 4, 3, 4);
             button1.Name = "button1";
             button1.Size = new Size(613, 39);
@@ -207,7 +207,7 @@
             // btnModificar
             // 
             btnModificar.Font = new Font("Segoe UI", 12F);
-            btnModificar.Location = new Point(14, 692);
+            btnModificar.Location = new Point(12, 590);
             btnModificar.Margin = new Padding(3, 4, 3, 4);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(613, 39);
@@ -219,7 +219,7 @@
             // button3
             // 
             button3.Font = new Font("Segoe UI", 12F);
-            button3.Location = new Point(14, 739);
+            button3.Location = new Point(12, 637);
             button3.Margin = new Padding(3, 4, 3, 4);
             button3.Name = "button3";
             button3.Size = new Size(613, 39);
@@ -231,7 +231,7 @@
             // button4
             // 
             button4.Font = new Font("Segoe UI", 12F);
-            button4.Location = new Point(14, 785);
+            button4.Location = new Point(12, 683);
             button4.Margin = new Padding(3, 4, 3, 4);
             button4.Name = "button4";
             button4.Size = new Size(613, 39);
@@ -243,7 +243,7 @@
             // button5
             // 
             button5.Font = new Font("Segoe UI", 12F);
-            button5.Location = new Point(14, 832);
+            button5.Location = new Point(12, 730);
             button5.Margin = new Padding(3, 4, 3, 4);
             button5.Name = "button5";
             button5.Size = new Size(613, 39);
@@ -254,7 +254,7 @@
             // dgvPrestamos
             // 
             dgvPrestamos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPrestamos.Location = new Point(18, 879);
+            dgvPrestamos.Location = new Point(18, 777);
             dgvPrestamos.Margin = new Padding(3, 4, 3, 4);
             dgvPrestamos.Name = "dgvPrestamos";
             dgvPrestamos.RowHeadersWidth = 51;
@@ -285,7 +285,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(649, 1051);
+            ClientSize = new Size(649, 952);
             Controls.Add(btnBuscar);
             Controls.Add(label8);
             Controls.Add(dgvPrestamos);

@@ -71,7 +71,7 @@ namespace BibliotecaApp.UI
                     EditorialId = ((Editorial)cmbEditorial.SelectedItem).IdEditorial,
                     CategoriaId = ((Categoria)cmbCategoria.SelectedItem).IdCategoria,
                     Estado = (EstadoDeLibroEnum)cmbEstado.SelectedItem,
-                    CantidadDisponible = int.Parse(txtCantidad.Text.Trim())
+                    Cantidad = int.Parse(txtCantidad.Text.Trim())
                 };
 
                 libroDAO.AgregarLibro(nuevoLibro);
@@ -121,7 +121,7 @@ namespace BibliotecaApp.UI
                 EditorialId = (int)cmbEditorial.SelectedValue,
                 CategoriaId = (int)cmbCategoria.SelectedValue,
                 Estado = (EstadoDeLibroEnum)cmbEstado.SelectedItem,
-                CantidadDisponible = cantidad
+                Cantidad = cantidad
             };
 
             try
@@ -201,7 +201,7 @@ namespace BibliotecaApp.UI
                     cmbEditorial.SelectedValue = libro.EditorialId;
                     cmbCategoria.SelectedValue = libro.CategoriaId;
                     cmbEstado.SelectedIndex = (int)libro.Estado;
-                    txtCantidad.Text = libro.CantidadDisponible.ToString();
+                    txtCantidad.Text = libro.Cantidad.ToString();
                 }
                 else
                 {

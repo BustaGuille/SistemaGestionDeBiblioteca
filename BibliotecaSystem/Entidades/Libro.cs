@@ -14,7 +14,7 @@ namespace BibliotecaSystem.Entidades
         public int CategoriaId { get; set; }
         public int EditorialId { get; set; }
         public EstadoDeLibroEnum Estado { get; set; }
-        public int CantidadDisponible { get; set; }
+        public int Cantidad { get; set; }
 
         public Libro() { }
 

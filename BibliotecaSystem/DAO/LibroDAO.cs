@@ -20,7 +20,7 @@ namespace BibliotecaSystem.DAO
                 cmd.Parameters.AddWithValue("@EditorialId", libro.EditorialId);
                 cmd.Parameters.AddWithValue("@CategoriaId", libro.CategoriaId);
                 cmd.Parameters.AddWithValue("@Estado", (int)libro.Estado);
-                cmd.Parameters.AddWithValue("@Cantidad", libro.CantidadDisponible);
+                cmd.Parameters.AddWithValue("@Cantidad", libro.Cantidad);
                 try
                 {
                     conn.Open();
@@ -47,7 +47,7 @@ namespace BibliotecaSystem.DAO
                 cmd.Parameters.AddWithValue("@EditorialId", libro.EditorialId);
                 cmd.Parameters.AddWithValue("@CategoriaId", libro.CategoriaId);
                 cmd.Parameters.AddWithValue("@Estado", (int)libro.Estado);
-                cmd.Parameters.AddWithValue("@Cantidad", libro.CantidadDisponible);
+                cmd.Parameters.AddWithValue("@Cantidad", libro.Cantidad);
                 cmd.Parameters.AddWithValue("@IdLibro", libro.IdLibro);
                 try
                 {
@@ -107,7 +107,7 @@ namespace BibliotecaSystem.DAO
                                 EditorialId = reader.GetInt32(reader.GetOrdinal("EditorialId")),
                                 CategoriaId = reader.GetInt32(reader.GetOrdinal("CategoriaId")),
                                 Estado = (EstadoDeLibroEnum)reader.GetInt32(reader.GetOrdinal("Estado")),
-                                CantidadDisponible = reader.GetInt32(reader.GetOrdinal("Cantidad"))
+                                Cantidad = reader.GetInt32(reader.GetOrdinal("Cantidad"))
                             };
                         }
                     }
@@ -146,7 +146,7 @@ namespace BibliotecaSystem.DAO
                                 EditorialId = reader.GetInt32(reader.GetOrdinal("EditorialId")),
                                 CategoriaId = reader.GetInt32(reader.GetOrdinal("CategoriaId")),
                                 Estado = (EstadoDeLibroEnum)reader.GetInt32(reader.GetOrdinal("Estado")),
-                                CantidadDisponible = reader.GetInt32(reader.GetOrdinal("Cantidad"))
+                                Cantidad = reader.GetInt32(reader.GetOrdinal("Cantidad"))
                             };
                         }
                     }
@@ -184,7 +184,7 @@ namespace BibliotecaSystem.DAO
                                 EditorialId = reader.GetInt32(reader.GetOrdinal("EditorialId")),
                                 CategoriaId = reader.GetInt32(reader.GetOrdinal("CategoriaId")),
                                 Estado = (EstadoDeLibroEnum)reader.GetInt32(reader.GetOrdinal("Estado")),
-                                CantidadDisponible = reader.GetInt32(reader.GetOrdinal("Cantidad"))
+                                Cantidad = reader.GetInt32(reader.GetOrdinal("Cantidad"))
                             });
                         }
                     }
@@ -218,6 +218,50 @@ namespace BibliotecaSystem.DAO
                 }
             }
         }
+
+        public List<Libro> ListarLibrosDisponibles()
+{
+    List<Libro> lista = new List<Libro>();
+
+    using (SqlConnection conn = new SqlConnection(cadenaConexion))
+    {
+        string query = @"SELECT IdLibro, Titulo, AutorId, CategoriaId, EditorialId, Estado, Cantidad
+                         FROM Libros
+                         WHERE Cantidad > 0";
+
+        SqlCommand cmd = new SqlCommand(query, conn);
+
+        try
+        {
+            conn.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Libro libro = new Libro
+                {
+                    IdLibro = Convert.ToInt32(reader["IdLibro"]),
+                    Titulo = reader["Titulo"].ToString(),
+                    AutorId = Convert.ToInt32(reader["AutorId"]),
+                    CategoriaId = Convert.ToInt32(reader["CategoriaId"]),
+                    EditorialId = Convert.ToInt32(reader["EditorialId"]),
+                    Estado = (EstadoDeLibroEnum)Enum.Parse(typeof(EstadoDeLibroEnum), reader["Estado"].ToString()),
+                    Cantidad = Convert.ToInt32(reader["Cantidad"])
+                };
+
+                lista.Add(libro);
+            }
+
+            reader.Close();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al listar libros disponibles: " + ex.Message);
+        }
+    }
+
+    return lista;
+}
 
     }
 }

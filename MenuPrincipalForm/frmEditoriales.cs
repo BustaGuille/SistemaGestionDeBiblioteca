@@ -30,9 +30,15 @@ namespace BibliotecaApp.UI
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtNombreEditorial.Text))
+            {
+                MessageBox.Show("Debe ingresar un nombre de editorial.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Editorial nueva = new Editorial
             {
-                NombreEditorial = txtNombreEditorial.Text
+                NombreEditorial = txtNombreEditorial.Text.Trim()
             };
 
             editorialDAO.AgregarEditorial(nueva);
@@ -42,22 +48,30 @@ namespace BibliotecaApp.UI
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIdEditorial.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtIdEditorial.Text))
+            {
+                MessageBox.Show("Debe ingresar el ID de la editorial que desea modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            Editorial modificado = new Editorial
+            Editorial edit = new Editorial
             {
                 IdEditorial = int.Parse(txtIdEditorial.Text),
-                NombreEditorial = txtNombreEditorial.Text
+                NombreEditorial = txtNombreEditorial.Text.Trim()
             };
 
-            editorialDAO.ModificarEditorial(modificado);
+            editorialDAO.ModificarEditorial(edit);
             CargarEditoriales();
             LimpiarCampos();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtIdEditorial.Text)) return;
+            if (string.IsNullOrWhiteSpace(txtIdEditorial.Text))
+            {
+                MessageBox.Show("Debe ingresar el ID de la editorial que desea eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             int id = int.Parse(txtIdEditorial.Text);
             editorialDAO.EliminarEditorial(id);
@@ -83,6 +97,28 @@ namespace BibliotecaApp.UI
         {
             txtIdEditorial.Text = "";
             txtNombreEditorial.Text = "";
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtIdEditorial.Text))
+            {
+                MessageBox.Show("Ingrese un ID de editorial para buscar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int id = int.Parse(txtIdEditorial.Text);
+            Editorial edit = editorialDAO.ObtenerEditorialPorId(id);
+
+            if (edit != null)
+            {
+                txtNombreEditorial.Text = edit.NombreEditorial;
+            }
+            else
+            {
+                MessageBox.Show("Editorial no encontrada.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarCampos();
+            }
         }
     }
 }

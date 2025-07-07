@@ -41,6 +41,7 @@
             label5 = new Label();
             label6 = new Label();
             btnDescargar = new Button();
+            btnLimpiar = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvHistorial).BeginInit();
             SuspendLayout();
             // 
@@ -73,7 +74,7 @@
             // 
             // btnBuscar
             // 
-            btnBuscar.Font = new Font("Segoe UI", 11F);
+            btnBuscar.Font = new Font("Segoe UI", 12F);
             btnBuscar.Location = new Point(21, 400);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(221, 43);
@@ -155,7 +156,7 @@
             // 
             // btnDescargar
             // 
-            btnDescargar.Font = new Font("Segoe UI", 11F);
+            btnDescargar.Font = new Font("Segoe UI", 12F);
             btnDescargar.Location = new Point(466, 400);
             btnDescargar.Name = "btnDescargar";
             btnDescargar.Size = new Size(221, 43);
@@ -164,11 +165,23 @@
             btnDescargar.UseVisualStyleBackColor = true;
             btnDescargar.Click += btnDescargar_Click;
             // 
+            // btnLimpiar
+            // 
+            btnLimpiar.Font = new Font("Segoe UI", 12F);
+            btnLimpiar.Location = new Point(292, 400);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(134, 43);
+            btnLimpiar.TabIndex = 13;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
+            // 
             // frmHistorial
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(707, 809);
+            Controls.Add(btnLimpiar);
             Controls.Add(btnDescargar);
             Controls.Add(label6);
             Controls.Add(label5);
@@ -205,5 +218,6 @@
         private Label label5;
         private Label label6;
         private Button btnDescargar;
+        private Button btnLimpiar;
     }
 }

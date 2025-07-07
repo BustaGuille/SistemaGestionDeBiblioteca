@@ -34,6 +34,7 @@ namespace BibliotecaApp.UI
             var datos = multas.Select(m => new
             {
                 m.IdMulta,
+                m.IdSocio, // 👈 Campo necesario para que no falle al hacer clic
                 Socio = socios.FirstOrDefault(s => s.IdSocio == m.IdSocio)?.NombreSocio ?? "Desconocido",
                 Monto = m.Monto,
                 FechaGeneracion = m.FechaGeneracion.ToString("dd/MM/yyyy"),
@@ -42,6 +43,12 @@ namespace BibliotecaApp.UI
 
             dgvMultas.DataSource = datos;
 
+            // Ocultar la columna IdSocio (opcional)
+            if (dgvMultas.Columns["IdSocio"] != null)
+            {
+                dgvMultas.Columns["IdSocio"].Visible = false;
+            }
+
             // Formatear columna Monto en formato moneda paraguaya (Gs)
             if (dgvMultas.Columns["Monto"] != null)
             {
@@ -49,7 +56,6 @@ namespace BibliotecaApp.UI
                 dgvMultas.Columns["Monto"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             }
         }
-
 
         private void CargarSocios()
         {
@@ -83,9 +89,9 @@ namespace BibliotecaApp.UI
             }
 
             DateTime fecha = dtpFechaMulta.Value;
-            if (fecha > DateTime.Today)
+            if (fecha.Date > DateTime.Today)
             {
-                MessageBox.Show("La fecha de la multa no puede ser futura.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("La fecha de la multa no puede ser posterior a hoy.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -142,7 +148,6 @@ namespace BibliotecaApp.UI
                 }
             }
         }
-
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
@@ -221,9 +226,9 @@ namespace BibliotecaApp.UI
             }
 
             DateTime fecha = dtpFechaMulta.Value;
-            if (fecha > DateTime.Today)
+            if (fecha.Date > DateTime.Today)
             {
-                MessageBox.Show("La fecha de la multa no puede ser futura.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("La fecha de la multa no puede ser posterior a hoy.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

@@ -27,9 +27,10 @@ namespace BibliotecaApp.UI
         private void CargarHistorial()
         {
             var historial = histoprestDAO.ListarHistorial();
-
             var socios = new SocioDAO().ListarSocios();
             var libros = new LibroDAO().ListarLibros();
+            var multas = new MultaDAO().ListarMultas();
+            var reservas = new ReservaDAO().ListarReservas();
 
             var datos = historial.Select(h => new
             {
@@ -39,13 +40,16 @@ namespace BibliotecaApp.UI
                 Socio = socios.FirstOrDefault(s => s.IdSocio == h.IdSocio)?.NombreSocio ?? "Desconocido",
                 FechaPrestamo = h.FechaPrestamo.ToString("dd/MM/yyyy"),
                 FechaDevolucion = h.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "Pendiente",
-                Devuelto = h.Devuelto ? "Sí" : "No"
+                Devuelto = h.Devuelto ? "Sí" : "No",
+                MultasTotales = multas.Count(m => m.IdSocio == h.IdSocio),
+                MontoMultas = string.Format("₲{0:N0}", multas.Where(m => m.IdSocio == h.IdSocio).Sum(m => m.Monto)),
+                ReservasTotales = reservas.Count(r => r.IdSocio == h.IdSocio),
+                PrestamosTotales = historial.Count(p => p.IdSocio == h.IdSocio)
             }).ToList();
 
             dgvHistorial.DataSource = null;
             dgvHistorial.DataSource = datos;
         }
-
 
         private void CargarFiltros()
         {
@@ -66,7 +70,6 @@ namespace BibliotecaApp.UI
         {
             try
             {
-                // Validación de fechas
                 DateTime desde = dtpDesde.Value.Date;
                 DateTime hasta = dtpHasta.Value.Date;
                 if (desde > hasta)
@@ -75,10 +78,8 @@ namespace BibliotecaApp.UI
                     return;
                 }
 
-                // Obtener todos los registros
                 var historial = histoprestDAO.ListarHistorial();
 
-                // Validación y filtrado por Socio
                 if (cmbSocioFiltro.SelectedIndex != -1 && cmbSocioFiltro.SelectedValue != null)
                 {
                     if (int.TryParse(cmbSocioFiltro.SelectedValue.ToString(), out int idSocio))
@@ -92,7 +93,6 @@ namespace BibliotecaApp.UI
                     }
                 }
 
-                // Validación y filtrado por Libro
                 if (cmbLibroFiltro.SelectedIndex != -1 && cmbLibroFiltro.SelectedValue != null)
                 {
                     if (int.TryParse(cmbLibroFiltro.SelectedValue.ToString(), out int idLibro))
@@ -106,18 +106,17 @@ namespace BibliotecaApp.UI
                     }
                 }
 
-                // Filtrado por fecha de préstamo
                 historial = historial.Where(h => h.FechaPrestamo.Date >= desde && h.FechaPrestamo.Date <= hasta).ToList();
 
-                // Mostrar resultado
                 if (historial.Count == 0)
                 {
                     MessageBox.Show("No se encontraron registros con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                // Reemplazar IDs por nombres
                 var socios = new SocioDAO().ListarSocios();
                 var libros = new LibroDAO().ListarLibros();
+                var multas = new MultaDAO().ListarMultas();
+                var reservas = new ReservaDAO().ListarReservas();
 
                 var datos = historial.Select(h => new
                 {
@@ -127,7 +126,11 @@ namespace BibliotecaApp.UI
                     Socio = socios.FirstOrDefault(s => s.IdSocio == h.IdSocio)?.NombreSocio ?? "Desconocido",
                     FechaPrestamo = h.FechaPrestamo.ToString("dd/MM/yyyy"),
                     FechaDevolucion = h.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "Pendiente",
-                    Devuelto = h.Devuelto ? "Sí" : "No"
+                    Devuelto = h.Devuelto ? "Sí" : "No",
+                    MultasTotales = multas.Count(m => m.IdSocio == h.IdSocio),
+                    MontoMultas = string.Format("₲{0:N0}", multas.Where(m => m.IdSocio == h.IdSocio).Sum(m => m.Monto)),
+                    ReservasTotales = reservas.Count(r => r.IdSocio == h.IdSocio),
+                    PrestamosTotales = historial.Count(p => p.IdSocio == h.IdSocio)
                 }).ToList();
 
                 dgvHistorial.DataSource = null;
@@ -138,7 +141,6 @@ namespace BibliotecaApp.UI
                 MessageBox.Show("Ocurrió un error al buscar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void btnDescargar_Click(object sender, EventArgs e)
         {
@@ -200,7 +202,7 @@ namespace BibliotecaApp.UI
                     contenido.AppendLine($"Devuelto: {(item.Devuelto ? "Sí" : "No")}");
                     contenido.AppendLine("");
                 }
-                
+
                 // Ruta del archivo
                 string rutaDescargas = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
                 string nombreSocioLimpio = string.Join("_", socioSeleccionado.NombreSocio.Split(Path.GetInvalidFileNameChars()));
@@ -220,5 +222,18 @@ namespace BibliotecaApp.UI
             }
         }
 
+        private void LimpiarCampos()
+        {
+            cmbSocioFiltro.SelectedIndex = -1;
+            cmbLibroFiltro.SelectedIndex = -1;
+            dtpDesde.Value = DateTime.Today;
+            dtpHasta.Value = DateTime.Today;
+            dgvHistorial.DataSource = null;
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            LimpiarCampos();
+        }
     }
 }

@@ -1,4 +1,4 @@
-
+--Query para la creacion de Tablas
 USE BibliotecaDB;
 GO
 -- Tabla de usuarios
@@ -88,5 +88,3 @@ CREATE TABLE Multas (
     Motivo NVARCHAR(200),
     Pagada BIT DEFAULT 0
 );
-
-SELECT * FROM Multas;

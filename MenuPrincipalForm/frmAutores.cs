@@ -80,6 +80,19 @@ namespace BibliotecaApp.UI
                 return;
             }
 
+            if (!int.TryParse(txtIdAutor.Text, out int idAutor))
+            {
+                MessageBox.Show("El ID del socio debe ser un número válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Autor autor = autorDAO.ObtenerAutorPorId(idAutor);
+            if (autor == null)
+            {
+                MessageBox.Show("No se encontró un autor con ese ID.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             DialogResult confirmacion = MessageBox.Show("¿Está seguro que desea eliminar este autor?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirmacion == DialogResult.Yes)
             {

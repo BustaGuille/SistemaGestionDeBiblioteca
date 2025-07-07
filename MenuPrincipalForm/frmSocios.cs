@@ -26,6 +26,13 @@ namespace BibliotecaApp.UI
         {
             dgvSocios.DataSource = null;
             dgvSocios.DataSource = socioDAO.ListarSocios();
+
+            dgvSocios.Columns["IdSocio"].HeaderText = "ID";
+            dgvSocios.Columns["NombreSocio"].HeaderText = "Nombre";
+            dgvSocios.Columns["CedulaSocio"].HeaderText = "Cédula";
+            dgvSocios.Columns["Direccion"].HeaderText = "Dirección";
+            dgvSocios.Columns["TelefonoSocio"].HeaderText = "Teléfono";
+            dgvSocios.Columns["Email"].HeaderText = "Email";
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -90,13 +97,25 @@ namespace BibliotecaApp.UI
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            
-            if (!int.TryParse(txtIDSocio.Text.Trim(), out int idSocio))
+
+            if (!int.TryParse(txtIDSocio.Text, out int idSocio))
             {
-                MessageBox.Show("Debe ingresar un ID válido para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El ID del socio debe ser un número válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            Socio socio = socioDAO.ObtenerSocioPorId(idSocio);
+            if (socio == null)
+            {
+                MessageBox.Show("No se encontró un socio con ese ID.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtIDSocio.Text))
+            {
+                MessageBox.Show("Por favor, ingrese un ID de socio para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             DialogResult confirmacion = MessageBox.Show("¿Está seguro que desea eliminar este socio?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirmacion == DialogResult.Yes)

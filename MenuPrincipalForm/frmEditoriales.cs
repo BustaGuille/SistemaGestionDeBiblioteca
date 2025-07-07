@@ -73,11 +73,27 @@ namespace BibliotecaApp.UI
                 return;
             }
 
+            if (!int.TryParse(txtIdEditorial.Text, out int idEditorial))
+            {
+                MessageBox.Show("ID inválido. Debe ser un número entero positivo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Editorial editorial = editorialDAO.ObtenerEditorialPorId(idEditorial);
+            if (editorial == null)
+            {
+                MessageBox.Show("No se encontró una editorial con ese ID.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarCampos();
+                return;
+            }
+
             int id = int.Parse(txtIdEditorial.Text);
             editorialDAO.EliminarEditorial(id);
             CargarEditoriales();
             LimpiarCampos();
         }
+       
+     
 
         private void dgvEditoriales_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

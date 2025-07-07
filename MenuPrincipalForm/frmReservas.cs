@@ -65,7 +65,7 @@ namespace BibliotecaApp.UI
             cbLibro.SelectedIndex = -1;
             cbSocio.SelectedIndex = -1;
             dtpFechaReserva.Value = DateTime.Now;
-            txtActivaManual.Clear(); // limpia el campo manual de Activa
+            chkActiva.Checked = false;
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -82,23 +82,12 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            string textoActiva = txtActivaManual.Text.Trim().ToUpper();
-            bool activa;
-
-            if (textoActiva == "SI") activa = true;
-            else if (textoActiva == "NO") activa = false;
-            else
-            {
-                MessageBox.Show("Debe escribir SI o NO en el campo de Activa.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             Reserva nueva = new Reserva
             {
                 IdLibro = Convert.ToInt32(cbLibro.SelectedValue),
                 IdSocio = Convert.ToInt32(cbSocio.SelectedValue),
                 FechaReserva = dtpFechaReserva.Value,
-                Activa = activa
+                Activa = chkActiva.Checked
             };
 
             try
@@ -128,16 +117,13 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            // Interpretar SI o NO como valor booleano
-            bool activa = txtActivaManual.Text.Trim().ToUpper() == "SI";
-
             Reserva modificada = new Reserva
             {
                 IdReserva = id,
                 IdLibro = Convert.ToInt32(cbLibro.SelectedValue),
                 IdSocio = Convert.ToInt32(cbSocio.SelectedValue),
                 FechaReserva = dtpFechaReserva.Value,
-                Activa = activa
+                Activa = chkActiva.Checked
             };
 
             reservaDAO.ModificarReserva(modificada);
@@ -145,8 +131,6 @@ namespace BibliotecaApp.UI
             CargarReservas();
             LimpiarCampos();
         }
-
-
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
@@ -198,8 +182,7 @@ namespace BibliotecaApp.UI
 
                 dtpFechaReserva.Value = DateTime.Parse(fila.Cells["FechaReserva"].Value.ToString());
 
-                bool activa = Convert.ToBoolean(fila.Cells["Activa"].Value);
-                txtActivaManual.Text = activa ? "Sí" : "No";
+                chkActiva.Checked = Convert.ToBoolean(fila.Cells["Activa"].Value);
             }
         }
 
@@ -218,7 +201,7 @@ namespace BibliotecaApp.UI
                 cbLibro.SelectedValue = reserva.IdLibro;
                 cbSocio.SelectedValue = reserva.IdSocio;
                 dtpFechaReserva.Value = reserva.FechaReserva;
-                txtActivaManual.Text = reserva.Activa ? "SI" : "NO";
+                chkActiva.Checked = reserva.Activa;
                 idReservaSeleccionada = reserva.IdReserva;
             }
             else

@@ -43,7 +43,8 @@
             btnLimpiar = new Button();
             dgvReservas = new DataGridView();
             btnBuscar = new Button();
-            txtActivaManual = new TextBox();
+            chkActiva = new CheckBox();
+            lblActiva = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvReservas).BeginInit();
             SuspendLayout();
             // 
@@ -189,17 +190,17 @@
             // dgvReservas
             // 
             dgvReservas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvReservas.Location = new Point(18, 467);
+            dgvReservas.Location = new Point(18, 523);
             dgvReservas.Margin = new Padding(4);
             dgvReservas.Name = "dgvReservas";
             dgvReservas.RowHeadersWidth = 51;
-            dgvReservas.Size = new Size(666, 236);
+            dgvReservas.Size = new Size(666, 180);
             dgvReservas.TabIndex = 13;
             // 
             // btnBuscar
             // 
             btnBuscar.Font = new Font("Segoe UI", 11F);
-            btnBuscar.Location = new Point(260, 399);
+            btnBuscar.Location = new Point(260, 464);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(221, 43);
             btnBuscar.TabIndex = 14;
@@ -207,20 +208,32 @@
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
             // 
-            // txtActivaManual
+            // chkActiva
             // 
-            txtActivaManual.Location = new Point(72, 408);
-            txtActivaManual.Name = "txtActivaManual";
-            txtActivaManual.Size = new Size(133, 34);
-            txtActivaManual.TabIndex = 16;
-            txtActivaManual.Text = "Activa (SI/NO)";
+            chkActiva.AutoSize = true;
+            chkActiva.Location = new Point(265, 405);
+            chkActiva.Name = "chkActiva";
+            chkActiva.Size = new Size(88, 32);
+            chkActiva.TabIndex = 15;
+            chkActiva.Text = "Activa";
+            chkActiva.UseVisualStyleBackColor = true;
+            // 
+            // lblActiva
+            // 
+            lblActiva.AutoSize = true;
+            lblActiva.Location = new Point(72, 409);
+            lblActiva.Name = "lblActiva";
+            lblActiva.Size = new Size(152, 28);
+            lblActiva.TabIndex = 16;
+            lblActiva.Text = "¿Activa (Sí/No)?";
             // 
             // frmReservas
             // 
             AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(707, 809);
-            Controls.Add(txtActivaManual);
+            Controls.Add(lblActiva);
+            Controls.Add(chkActiva);
             Controls.Add(btnBuscar);
             Controls.Add(dgvReservas);
             Controls.Add(btnLimpiar);
@@ -262,6 +275,7 @@
         private Button btnLimpiar;
         private DataGridView dgvReservas;
         private Button btnBuscar;
-        private TextBox txtActivaManual;
+        private CheckBox chkActiva;
+        private Label lblActiva;
     }
 }

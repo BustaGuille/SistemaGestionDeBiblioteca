@@ -3,6 +3,7 @@ using BibliotecaSystem.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace BibliotecaApp.UI
@@ -13,6 +14,7 @@ namespace BibliotecaApp.UI
         private LibroDAO libroDAO = new LibroDAO();
         private SocioDAO socioDAO = new SocioDAO();
         int? idReservaSeleccionada = null;
+
         public frmReservas()
         {
             InitializeComponent();
@@ -41,10 +43,9 @@ namespace BibliotecaApp.UI
             dgvReservas.DataSource = datos;
         }
 
-
         private void CargarLibros()
         {
-            cbLibro.DataSource = libroDAO.ListarLibros(); // Debe devolver una lista con IdLibro y Titulo
+            cbLibro.DataSource = libroDAO.ListarLibros();
             cbLibro.DisplayMember = "Titulo";
             cbLibro.ValueMember = "IdLibro";
             cbLibro.SelectedIndex = -1;
@@ -52,7 +53,7 @@ namespace BibliotecaApp.UI
 
         private void CargarSocios()
         {
-            cbSocio.DataSource = socioDAO.ListarSocios(); // Debe devolver una lista con IdSocio y NombreSocio
+            cbSocio.DataSource = socioDAO.ListarSocios();
             cbSocio.DisplayMember = "NombreSocio";
             cbSocio.ValueMember = "IdSocio";
             cbSocio.SelectedIndex = -1;
@@ -64,38 +65,40 @@ namespace BibliotecaApp.UI
             cbLibro.SelectedIndex = -1;
             cbSocio.SelectedIndex = -1;
             dtpFechaReserva.Value = DateTime.Now;
+            txtActivaManual.Clear(); // limpia el campo manual de Activa
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            // Validar que se haya seleccionado un libro
             if (cbLibro.SelectedItem == null || cbLibro.SelectedIndex == -1)
             {
                 MessageBox.Show("Debe seleccionar un libro.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar que se haya seleccionado un socio
             if (cbSocio.SelectedItem == null || cbSocio.SelectedIndex == -1)
             {
                 MessageBox.Show("Debe seleccionar un socio.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar que la fecha no sea futura (opcional, pero recomendable)
-            if (dtpFechaReserva.Value.Date > DateTime.Now.Date)
+            string textoActiva = txtActivaManual.Text.Trim().ToUpper();
+            bool activa;
+
+            if (textoActiva == "SI") activa = true;
+            else if (textoActiva == "NO") activa = false;
+            else
             {
-                MessageBox.Show("La fecha de reserva no puede ser futura.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Debe escribir SI o NO en el campo de Activa.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Si todo está correcto, creamos la reserva
             Reserva nueva = new Reserva
             {
                 IdLibro = Convert.ToInt32(cbLibro.SelectedValue),
                 IdSocio = Convert.ToInt32(cbSocio.SelectedValue),
                 FechaReserva = dtpFechaReserva.Value,
-                Activa = true
+                Activa = activa
             };
 
             try
@@ -109,9 +112,7 @@ namespace BibliotecaApp.UI
             {
                 MessageBox.Show("Ocurrió un error al agregar la reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
@@ -127,12 +128,16 @@ namespace BibliotecaApp.UI
                 return;
             }
 
+            // Interpretar SI o NO como valor booleano
+            bool activa = txtActivaManual.Text.Trim().ToUpper() == "SI";
+
             Reserva modificada = new Reserva
             {
                 IdReserva = id,
                 IdLibro = Convert.ToInt32(cbLibro.SelectedValue),
                 IdSocio = Convert.ToInt32(cbSocio.SelectedValue),
-                FechaReserva = dtpFechaReserva.Value
+                FechaReserva = dtpFechaReserva.Value,
+                Activa = activa
             };
 
             reservaDAO.ModificarReserva(modificada);
@@ -140,6 +145,8 @@ namespace BibliotecaApp.UI
             CargarReservas();
             LimpiarCampos();
         }
+
+
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
@@ -149,7 +156,6 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            // Verificar si existe la reserva
             Reserva reservaExistente = reservaDAO.ObtenerReservaPorId(id);
             if (reservaExistente == null)
             {
@@ -174,16 +180,26 @@ namespace BibliotecaApp.UI
             }
         }
 
-
         private void dgvReservas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 var fila = dgvReservas.Rows[e.RowIndex];
                 txtIdReserva.Text = fila.Cells["IdReserva"].Value.ToString();
-                cbLibro.SelectedValue = Convert.ToInt32(fila.Cells["IdLibro"].Value);
-                cbSocio.SelectedValue = Convert.ToInt32(fila.Cells["IdSocio"].Value);
-                dtpFechaReserva.Value = Convert.ToDateTime(fila.Cells["FechaReserva"].Value);
+
+                string nombreLibro = fila.Cells["Libro"].Value.ToString();
+                string nombreSocio = fila.Cells["Socio"].Value.ToString();
+
+                var libro = libroDAO.ListarLibros().FirstOrDefault(l => l.Titulo == nombreLibro);
+                var socio = socioDAO.ListarSocios().FirstOrDefault(s => s.NombreSocio == nombreSocio);
+
+                if (libro != null) cbLibro.SelectedValue = libro.IdLibro;
+                if (socio != null) cbSocio.SelectedValue = socio.IdSocio;
+
+                dtpFechaReserva.Value = DateTime.Parse(fila.Cells["FechaReserva"].Value.ToString());
+
+                bool activa = Convert.ToBoolean(fila.Cells["Activa"].Value);
+                txtActivaManual.Text = activa ? "Sí" : "No";
             }
         }
 
@@ -202,6 +218,7 @@ namespace BibliotecaApp.UI
                 cbLibro.SelectedValue = reserva.IdLibro;
                 cbSocio.SelectedValue = reserva.IdSocio;
                 dtpFechaReserva.Value = reserva.FechaReserva;
+                txtActivaManual.Text = reserva.Activa ? "SI" : "NO";
                 idReservaSeleccionada = reserva.IdReserva;
             }
             else

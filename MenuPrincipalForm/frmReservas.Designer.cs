@@ -43,6 +43,7 @@
             btnLimpiar = new Button();
             dgvReservas = new DataGridView();
             btnBuscar = new Button();
+            txtActivaManual = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dgvReservas).BeginInit();
             SuspendLayout();
             // 
@@ -206,11 +207,20 @@
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
             // 
+            // txtActivaManual
+            // 
+            txtActivaManual.Location = new Point(72, 408);
+            txtActivaManual.Name = "txtActivaManual";
+            txtActivaManual.Size = new Size(133, 34);
+            txtActivaManual.TabIndex = 16;
+            txtActivaManual.Text = "Activa (SI/NO)";
+            // 
             // frmReservas
             // 
             AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(707, 809);
+            Controls.Add(txtActivaManual);
             Controls.Add(btnBuscar);
             Controls.Add(dgvReservas);
             Controls.Add(btnLimpiar);
@@ -252,5 +262,6 @@
         private Button btnLimpiar;
         private DataGridView dgvReservas;
         private Button btnBuscar;
+        private TextBox txtActivaManual;
     }
 }

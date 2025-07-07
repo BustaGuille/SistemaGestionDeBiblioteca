@@ -26,6 +26,8 @@ namespace BibliotecaApp.UI
         {
             dgvCategorias.DataSource = null;
             dgvCategorias.DataSource = categoriaDAO.ListarCategorias();
+
+            dgvCategorias.Columns["NombreCategoria"].HeaderText = "Categoria";
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -70,6 +72,20 @@ namespace BibliotecaApp.UI
             if (string.IsNullOrWhiteSpace(txtIdCategoria.Text))
             {
                 MessageBox.Show("Debe ingresar el ID de la categoría que desea eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if(!int.TryParse(txtIdCategoria.Text, out int idCategoria))
+            {
+                MessageBox.Show("El ID de categoría debe ser un número válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Categoria categoria = categoriaDAO.ObtenerCategoriaPorId(idCategoria);
+            if (categoria == null)
+            {
+                MessageBox.Show("Categoría no encontrada.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarCampos();
                 return;
             }
 

@@ -24,7 +24,6 @@ namespace BibliotecaApp.UI
             {
                 lblMensaje.Text = string.Empty;
                 MessageBox.Show("Inicio de sesión exitoso.", "Bienvenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //MessageBox.Show ("Inicio de sesión exitoso. ¡Bienvenido " + user.NombreUsuario + "!");
 
                 this.Hide(); //Con esto ocultamos el formulario
                 frmMenuPrincipal menuPrincipal = new frmMenuPrincipal();
@@ -36,6 +35,7 @@ namespace BibliotecaApp.UI
                 // Si el usuario no existe o la contraseña es incorrecta, mostrar un mensaje de error
                 lblMensaje.Text = "Usuario o contraseña incorrectos. Inténtalo de nuevo.";
                 lblMensaje.ForeColor = Color.Red;
+                lblMensaje.Visible = true;
             }
         }
     }

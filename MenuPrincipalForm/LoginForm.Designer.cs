@@ -99,11 +99,12 @@
             // 
             lblMensaje.AutoSize = true;
             lblMensaje.ForeColor = Color.Red;
-            lblMensaje.Location = new Point(232, 426);
+            lblMensaje.Location = new Point(115, 432);
             lblMensaje.Name = "lblMensaje";
             lblMensaje.Size = new Size(62, 20);
             lblMensaje.TabIndex = 6;
             lblMensaje.Text = "Messaje";
+            lblMensaje.Visible = false;
             // 
             // LoginForm
             // 

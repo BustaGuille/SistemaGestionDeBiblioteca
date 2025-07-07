@@ -178,7 +178,7 @@
             Controls.Add(label1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 1, true);
             Name = "frmUsuarios";
-            Text = "Usuario";
+            Text = "Formulario de Usuario";
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).EndInit();
             ResumeLayout(false);
             PerformLayout();

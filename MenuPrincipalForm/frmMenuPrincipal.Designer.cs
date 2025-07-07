@@ -46,7 +46,6 @@
             multasToolStripMenuItem = new ToolStripMenuItem();
             historialToolStripMenuItem = new ToolStripMenuItem();
             ayudaToolStripMenuItem = new ToolStripMenuItem();
-            manualDeUsuariosToolStripMenuItem = new ToolStripMenuItem();
             versionToolStripMenuItem = new ToolStripMenuItem();
             label1 = new Label();
             pictureBox1 = new PictureBox();
@@ -175,22 +174,16 @@
             // 
             // ayudaToolStripMenuItem
             // 
-            ayudaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manualDeUsuariosToolStripMenuItem, versionToolStripMenuItem });
+            ayudaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { versionToolStripMenuItem });
             ayudaToolStripMenuItem.Font = new Font("Segoe UI", 12F);
             ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
             ayudaToolStripMenuItem.Size = new Size(82, 32);
             ayudaToolStripMenuItem.Text = "Ayuda";
             // 
-            // manualDeUsuariosToolStripMenuItem
-            // 
-            manualDeUsuariosToolStripMenuItem.Name = "manualDeUsuariosToolStripMenuItem";
-            manualDeUsuariosToolStripMenuItem.Size = new Size(267, 32);
-            manualDeUsuariosToolStripMenuItem.Text = "Manual de usuarios";
-            // 
             // versionToolStripMenuItem
             // 
             versionToolStripMenuItem.Name = "versionToolStripMenuItem";
-            versionToolStripMenuItem.Size = new Size(267, 32);
+            versionToolStripMenuItem.Size = new Size(224, 32);
             versionToolStripMenuItem.Text = "Version";
             versionToolStripMenuItem.Click += versionToolStripMenuItem_Click;
             // 
@@ -253,7 +246,6 @@
         private ToolStripMenuItem multasToolStripMenuItem;
         private ToolStripMenuItem historialToolStripMenuItem;
         private ToolStripMenuItem ayudaToolStripMenuItem;
-        private ToolStripMenuItem manualDeUsuariosToolStripMenuItem;
         private ToolStripMenuItem versionToolStripMenuItem;
         private Label label1;
         private PictureBox pictureBox1;

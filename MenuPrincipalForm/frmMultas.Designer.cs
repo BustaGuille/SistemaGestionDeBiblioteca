@@ -237,7 +237,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "frmMultas";
-            Text = "frmMultas";
+            Text = "Formulario de Multas";
             ((System.ComponentModel.ISupportInitialize)dgvMultas).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -302,7 +302,7 @@
             Controls.Add(label1);
             Margin = new Padding(3, 4, 3, 4);
             Name = "frmLibros";
-            Text = "libros";
+            Text = "Formulario de Libros";
             ((System.ComponentModel.ISupportInitialize)dgvLibros).EndInit();
             ResumeLayout(false);
             PerformLayout();

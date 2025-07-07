@@ -171,7 +171,7 @@
             Controls.Add(txtNombreEditorial);
             Controls.Add(txtIdEditorial);
             Name = "frmEditoriales";
-            Text = "frmEditoriales";
+            Text = "Formulario de Editoriales";
             ((System.ComponentModel.ISupportInitialize)dgvEditoriales).EndInit();
             ResumeLayout(false);
             PerformLayout();

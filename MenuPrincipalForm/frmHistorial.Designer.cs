@@ -197,7 +197,7 @@
             Controls.Add(label1);
             Margin = new Padding(3, 4, 3, 4);
             Name = "frmHistorial";
-            Text = "D";
+            Text = "Formulario de Hisrorial";
             ((System.ComponentModel.ISupportInitialize)dgvHistorial).EndInit();
             ResumeLayout(false);
             PerformLayout();

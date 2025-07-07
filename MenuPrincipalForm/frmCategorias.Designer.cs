@@ -170,7 +170,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "frmCategorias";
-            Text = "frmCategorias";
+            Text = "Formulario de Categorias";
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).EndInit();
             ResumeLayout(false);
             PerformLayout();

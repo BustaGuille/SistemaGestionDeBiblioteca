@@ -95,18 +95,7 @@ SELECT * FROM Libros;
 
 
 
-
-
-
-
-
-
-
-
-
-
-USE BibliotecaDB;
-GO
+--Para Hacer la Eliminacion de tablas
 
 -- Eliminar tablas que dependen de otras por claves foráneas
 DROP TABLE IF EXISTS Historial;

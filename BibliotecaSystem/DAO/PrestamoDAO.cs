@@ -23,7 +23,8 @@ namespace BibliotecaSystem.DAO
                 {
                     // Estamos insertando un nuevo préstamo en la tabla Prestamos
                     string queryInsert = @"INSERT INTO Prestamos (LibroId, UsuarioId, SocioId, FechaPrestamo, FechaDevolucion, Devuelto)
-                                   VALUES (@LibroId, @UsuarioId, @SocioId, @FechaPrestamo, @FechaDevolucion, @Devuelto)";
+                       VALUES (@LibroId, @UsuarioId, @SocioId, @FechaPrestamo, @FechaDevolucion, @Devuelto);
+                       SELECT SCOPE_IDENTITY();";
                     SqlCommand cmdInsert = new SqlCommand(queryInsert, conn, transaction);
                     cmdInsert.Parameters.AddWithValue("@LibroId", prestamo.LibroId);
                     cmdInsert.Parameters.AddWithValue("@UsuarioId", prestamo.UsuarioId);
@@ -32,7 +33,9 @@ namespace BibliotecaSystem.DAO
                     cmdInsert.Parameters.AddWithValue("@FechaDevolucion", (object)prestamo.FechaDevolucion ?? DBNull.Value);
                     cmdInsert.Parameters.AddWithValue("@Devuelto", prestamo.Devuelto);
 
-                    cmdInsert.ExecuteNonQuery();
+                  
+
+                    int idPrestamo = Convert.ToInt32(cmdInsert.ExecuteScalar());
 
                     // Estamos actualizando la cantidad de ejemplares del libro en la tabla Libros
                     string queryUpdate = @"UPDATE Libros SET Cantidad = Cantidad - 1 WHERE IdLibro = @IdLibro AND Cantidad > 0"; //Actualizamos la cantidad de libros solo si hay ejemplares disponibles
@@ -43,6 +46,19 @@ namespace BibliotecaSystem.DAO
 
                     if (filasAfectadas == 0) //Es por si no hay ejemplares disponibles del libro hacemos rollback
                         throw new Exception("No hay ejemplares disponibles del libro.");
+
+                    Historial historial = new Historial
+                    {
+                        IdPrestamo = idPrestamo,
+                        IdLibro = prestamo.LibroId,
+                        IdSocio = prestamo.SocioId,
+                        FechaPrestamo = prestamo.FechaPrestamo,
+                        FechaDevolucion = prestamo.FechaDevolucion,
+                        Devuelto = prestamo.Devuelto
+                    };
+
+                    new HistorialDAO().RegistrarHistorial(historial);
+
 
                     transaction.Commit(); // Si es que todo sale bien se confirma la transacción
                 }

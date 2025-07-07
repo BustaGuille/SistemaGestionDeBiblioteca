@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenuPrincipal));
             menuStrip1 = new MenuStrip();
             sistemaToolStripMenuItem = new ToolStripMenuItem();
             acercaDeToolStripMenuItem = new ToolStripMenuItem();
@@ -206,10 +207,10 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = BibliotecaApp.UI.Properties.Resources.ofe5l4d9e0m61;
-            pictureBox1.Location = new Point(52, 146);
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(33, 177);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(634, 357);
+            pictureBox1.Size = new Size(664, 357);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 2;
             pictureBox1.TabStop = false;

@@ -26,9 +26,26 @@ namespace BibliotecaApp.UI
 
         private void CargarHistorial()
         {
+            var historial = histoprestDAO.ListarHistorial();
+
+            var socios = new SocioDAO().ListarSocios();
+            var libros = new LibroDAO().ListarLibros();
+
+            var datos = historial.Select(h => new
+            {
+                h.IdHistorial,
+                h.IdPrestamo,
+                Libro = libros.FirstOrDefault(l => l.IdLibro == h.IdLibro)?.Titulo ?? "Desconocido",
+                Socio = socios.FirstOrDefault(s => s.IdSocio == h.IdSocio)?.NombreSocio ?? "Desconocido",
+                FechaPrestamo = h.FechaPrestamo.ToString("dd/MM/yyyy"),
+                FechaDevolucion = h.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "Pendiente",
+                Devuelto = h.Devuelto ? "Sí" : "No"
+            }).ToList();
+
             dgvHistorial.DataSource = null;
-            dgvHistorial.DataSource = histoprestDAO.ListarHistorial(); // reutilizamos el método del DAO
+            dgvHistorial.DataSource = datos;
         }
+
 
         private void CargarFiltros()
         {
@@ -98,14 +115,30 @@ namespace BibliotecaApp.UI
                     MessageBox.Show("No se encontraron registros con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
+                // Reemplazar IDs por nombres
+                var socios = new SocioDAO().ListarSocios();
+                var libros = new LibroDAO().ListarLibros();
+
+                var datos = historial.Select(h => new
+                {
+                    h.IdHistorial,
+                    h.IdPrestamo,
+                    Libro = libros.FirstOrDefault(l => l.IdLibro == h.IdLibro)?.Titulo ?? "Desconocido",
+                    Socio = socios.FirstOrDefault(s => s.IdSocio == h.IdSocio)?.NombreSocio ?? "Desconocido",
+                    FechaPrestamo = h.FechaPrestamo.ToString("dd/MM/yyyy"),
+                    FechaDevolucion = h.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "Pendiente",
+                    Devuelto = h.Devuelto ? "Sí" : "No"
+                }).ToList();
+
                 dgvHistorial.DataSource = null;
-                dgvHistorial.DataSource = historial;
+                dgvHistorial.DataSource = datos;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Ocurrió un error al buscar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void btnDescargar_Click(object sender, EventArgs e)
         {
@@ -115,49 +148,77 @@ namespace BibliotecaApp.UI
                 return;
             }
 
+            Socio socioSeleccionado = new SocioDAO().ObtenerSocioPorId(idSocio);
+            if (socioSeleccionado == null)
+            {
+                MessageBox.Show("No se encontró el socio especificado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
-                // Filtrar historial por socio
-                var historial = histoprestDAO.ListarHistorial()
-                                  .Where(h => h.IdSocio == idSocio)
-                                  .ToList();
+                // Obtener historial de préstamos
+                var historial = histoprestDAO.ListarHistorial().Where(h => h.IdSocio == idSocio).ToList();
+                var multas = new MultaDAO().ListarMultas().Where(m => m.IdSocio == idSocio).ToList();
+                var reservas = new ReservaDAO().ListarReservas().Where(r => r.IdSocio == idSocio).ToList();
 
-                if (historial.Count == 0)
+                if (historial.Count == 0 && multas.Count == 0 && reservas.Count == 0)
                 {
-                    MessageBox.Show("No hay historial para el socio seleccionado.", "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("El socio no tiene registros de préstamos, multas ni reservas.", "Sin datos", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                // Ruta a la carpeta Descargas del usuario
-                string rutaDescargas = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-                string archivo = Path.Combine(rutaDescargas, $"Historial_Socio_{idSocio}.txt");
+                // Crear contenido del archivo
+                StringBuilder contenido = new StringBuilder();
+                contenido.AppendLine($"Historial del Socio: {socioSeleccionado.NombreSocio} (ID: {socioSeleccionado.IdSocio})");
+                contenido.AppendLine(new string('-', 60));
 
-                // Crear archivo y escribir contenido
-                using (StreamWriter writer = new StreamWriter(archivo))
+                contenido.AppendLine($"Total de Multas: {multas.Count}");
+                foreach (var m in multas)
                 {
-                    writer.WriteLine($"Historial de Préstamos del Socio ID {idSocio}");
-                    writer.WriteLine("-------------------------------------------------");
-
-                    foreach (var item in historial)
-                    {
-                        writer.WriteLine($"ID Préstamo: {item.IdPrestamo}");
-                        writer.WriteLine($"ID Libro: {item.IdLibro}");
-                        writer.WriteLine($"ID Socio: {item.IdSocio}");
-                        writer.WriteLine($"Fecha Préstamo: {item.FechaPrestamo:dd/MM/yyyy}");
-                        writer.WriteLine($"Fecha Devolución: {(item.FechaDevolucion.HasValue ? item.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "Pendiente")}");
-                        writer.WriteLine($"Devuelto: {(item.Devuelto ? "Sí" : "No")}");
-                        writer.WriteLine("-------------------------------------------------");
-                    }
+                    contenido.AppendLine($"Motivo: {m.Motivo}");
+                    contenido.AppendLine($"Monto: ₲{m.Monto:N0}");
+                    contenido.AppendLine("");
                 }
 
-                // Mostrar mensaje y abrir el archivo automáticamente
+                contenido.AppendLine(new string('-', 60));
+                contenido.AppendLine($"Total de Reservas: {reservas.Count}");
+                foreach (var r in reservas)
+                {
+                    var libro = new LibroDAO().ObtenerLibroPorId(r.IdLibro);
+                    contenido.AppendLine($"Libro reservado: {libro?.Titulo ?? "Desconocido"} - Fecha: {r.FechaReserva:dd/MM/yyyy}");
+                }
+
+                contenido.AppendLine(new string('-', 60));
+                contenido.AppendLine($"Total de Préstamos: {historial.Count}");
+                foreach (var item in historial)
+                {
+                    var libro = new LibroDAO().ObtenerLibroPorId(item.IdLibro);
+                    contenido.AppendLine($"Libro: {libro?.Titulo ?? "Desconocido"}");
+                    contenido.AppendLine($"Fecha Préstamo: {item.FechaPrestamo:dd/MM/yyyy}");
+                    contenido.AppendLine($"Fecha Devolución: {(item.FechaDevolucion.HasValue ? item.FechaDevolucion.Value.ToString("dd/MM/yyyy") : "Pendiente")}");
+                    contenido.AppendLine($"Devuelto: {(item.Devuelto ? "Sí" : "No")}");
+                    contenido.AppendLine("");
+                }
+                
+                // Ruta del archivo
+                string rutaDescargas = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                string nombreSocioLimpio = string.Join("_", socioSeleccionado.NombreSocio.Split(Path.GetInvalidFileNameChars()));
+                string archivo = Path.Combine(rutaDescargas, $"Historial_Socio_{nombreSocioLimpio}.txt");
+
+
+                // Guardar archivo
+                File.WriteAllText(archivo, contenido.ToString(), Encoding.UTF8);
                 MessageBox.Show("Archivo generado correctamente en la carpeta Descargas.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Process.Start("explorer.exe", archivo); // Abrir automáticamente el archivo generado
+
+                // Abrir el archivo automáticamente
+                Process.Start("explorer.exe", archivo);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al generar archivo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }

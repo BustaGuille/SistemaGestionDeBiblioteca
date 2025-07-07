@@ -18,7 +18,7 @@ namespace BibliotecaSystem.Entidades
         public Multa() { }
         public override string ToString()
         {
-            return $"Multa ID: {IdMulta}, Socio ID: {IdSocio}, Monto: {Monto}, Fecha: {FechaGeneracion.ToString("dd/MM/yyyy")}, Pagada: {(Pagada ? "Sí" : "No")}";
+            return $"Multa ID: {IdMulta}, Socio ID: {IdSocio}, Monto: ₲ {Monto.ToString("N0")}, Fecha: {FechaGeneracion:dd/MM/yyyy}, Pagada: {(Pagada ? "Sí" : "No")}";
         }
 
     }

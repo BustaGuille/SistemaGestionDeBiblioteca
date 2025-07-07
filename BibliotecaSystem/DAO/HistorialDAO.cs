@@ -70,8 +70,9 @@ namespace BibliotecaSystem.DAO
                 Console.WriteLine("Ocurrio un Error al listar historial.");
                 throw new Exception("Error al listar historial: " + ex.Message);
             }
-
+           Console.WriteLine("Historial cargado: " + lista.Count);
             return lista;
+
         }
     }
 }

@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using BibliotecaSystem.DAO;
 using BibliotecaSystem.Entidades;
 
-
 namespace BibliotecaApp.UI
 {
     public partial class frmMultas : Form
@@ -20,39 +19,69 @@ namespace BibliotecaApp.UI
         public frmMultas()
         {
             InitializeComponent();
+            CargarSocios();
             CargarMultas();
+            dgvMultas.CellFormatting += dgvMultas_CellFormatting; // ← registrar el evento aquí
         }
 
         private void CargarMultas()
         {
             dgvMultas.DataSource = null;
-            dgvMultas.DataSource = multaDAO.ListarMultas();
+            var multas = multaDAO.ListarMultas();
+            var socios = new SocioDAO().ListarSocios();
+
+            // Unimos las multas con los nombres de los socios
+            var datos = multas.Select(m => new
+            {
+                m.IdMulta,
+                Socio = socios.FirstOrDefault(s => s.IdSocio == m.IdSocio)?.NombreSocio ?? "Desconocido",
+                Monto = m.Monto,
+                FechaGeneracion = m.FechaGeneracion.ToString("dd/MM/yyyy"),
+                m.Motivo
+            }).ToList();
+
+            dgvMultas.DataSource = datos;
+
+            // Formatear columna Monto en formato moneda paraguaya (Gs)
+            if (dgvMultas.Columns["Monto"] != null)
+            {
+                dgvMultas.Columns["Monto"].DefaultCellStyle.Format = "N0"; // Miles sin decimales
+                dgvMultas.Columns["Monto"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
+        }
+
+
+        private void CargarSocios()
+        {
+            SocioDAO socioDAO = new SocioDAO();
+            List<Socio> socios = socioDAO.ListarSocios();
+
+            cmbSocio.DataSource = socios;
+            cmbSocio.DisplayMember = "NombreSocio";
+            cmbSocio.ValueMember = "IdSocio";
+            cmbSocio.SelectedIndex = -1;
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            // Validar socio
             if (cmbSocio.SelectedIndex == -1 || cmbSocio.SelectedValue == null)
             {
                 MessageBox.Show("Debe seleccionar un socio válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar monto
             if (!decimal.TryParse(txtMonto.Text.Trim(), out decimal monto) || monto <= 0)
             {
                 MessageBox.Show("Debe ingresar un monto válido mayor que cero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar motivo
             if (string.IsNullOrWhiteSpace(txtMotivo.Text))
             {
                 MessageBox.Show("Debe ingresar un motivo para la multa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar fecha
             DateTime fecha = dtpFechaMulta.Value;
             if (fecha > DateTime.Today)
             {
@@ -60,7 +89,6 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            // Crear multa
             Multa nueva = new Multa
             {
                 IdSocio = Convert.ToInt32(cmbSocio.SelectedValue),
@@ -74,8 +102,8 @@ namespace BibliotecaApp.UI
             {
                 multaDAO.RegistrarMulta(nueva);
                 MessageBox.Show("Multa agregada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                CargarMultas();   // Refresca el DataGridView
-                LimpiarCampos();  // Limpia los campos
+                CargarMultas();
+                LimpiarCampos();
             }
             catch (Exception ex)
             {
@@ -83,12 +111,18 @@ namespace BibliotecaApp.UI
             }
         }
 
-
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(txtIdMulta.Text.Trim(), out int idMulta))
             {
                 MessageBox.Show("Debe ingresar un ID válido para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Multa multaExistente = multaDAO.ObtenerMultaPorId(idMulta);
+            if (multaExistente == null)
+            {
+                MessageBox.Show("No se encontró ninguna multa con ese ID. No se puede eliminar.", "No encontrada", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -129,10 +163,10 @@ namespace BibliotecaApp.UI
             {
                 var fila = dgvMultas.Rows[e.RowIndex];
                 txtIdMulta.Text = fila.Cells["IdMulta"].Value.ToString();
-                cmbSocio.Text = fila.Cells["SocioId"].Value.ToString();
+                cmbSocio.SelectedValue = Convert.ToInt32(fila.Cells["IdSocio"].Value);
                 txtMonto.Text = fila.Cells["Monto"].Value.ToString();
                 txtMotivo.Text = fila.Cells["Motivo"].Value.ToString();
-                dtpFechaMulta.Value = Convert.ToDateTime(fila.Cells["FechaMulta"].Value);
+                dtpFechaMulta.Value = Convert.ToDateTime(fila.Cells["FechaGeneracion"].Value);
             }
         }
 
@@ -149,7 +183,7 @@ namespace BibliotecaApp.UI
             {
                 txtIdMulta.Text = multa.IdMulta.ToString();
                 cmbSocio.SelectedValue = multa.IdSocio;
-                txtMonto.Text = multa.Monto.ToString("0.00");
+                txtMonto.Text = multa.Monto.ToString("N0");
                 txtMotivo.Text = multa.Motivo;
                 dtpFechaMulta.Value = multa.FechaGeneracion;
             }
@@ -162,35 +196,30 @@ namespace BibliotecaApp.UI
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            // Validar que el ID de la multa sea válido
             if (!int.TryParse(txtIdMulta.Text.Trim(), out int idMulta))
             {
                 MessageBox.Show("Debe ingresar un ID de multa válido.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar selección de socio
             if (cmbSocio.SelectedIndex == -1 || cmbSocio.SelectedValue == null)
             {
                 MessageBox.Show("Debe seleccionar un socio válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar monto
             if (!decimal.TryParse(txtMonto.Text.Trim(), out decimal monto) || monto <= 0)
             {
                 MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar motivo
             if (string.IsNullOrWhiteSpace(txtMotivo.Text))
             {
                 MessageBox.Show("Ingrese el motivo de la multa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validar fecha
             DateTime fecha = dtpFechaMulta.Value;
             if (fecha > DateTime.Today)
             {
@@ -198,7 +227,6 @@ namespace BibliotecaApp.UI
                 return;
             }
 
-            // Crear objeto Modificado
             Multa modificada = new Multa
             {
                 IdMulta = idMulta,
@@ -219,6 +247,18 @@ namespace BibliotecaApp.UI
             catch (Exception ex)
             {
                 MessageBox.Show("Error al modificar la multa: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvMultas_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvMultas.Columns[e.ColumnIndex].Name == "Monto" && e.Value != null)
+            {
+                if (decimal.TryParse(e.Value.ToString(), out decimal monto))
+                {
+                    e.Value = $"₲{monto:N0}";
+                    e.FormattingApplied = true;
+                }
             }
         }
     }

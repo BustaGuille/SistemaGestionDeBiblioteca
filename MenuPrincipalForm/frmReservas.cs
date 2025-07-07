@@ -24,8 +24,23 @@ namespace BibliotecaApp.UI
         private void CargarReservas()
         {
             dgvReservas.DataSource = null;
-            dgvReservas.DataSource = reservaDAO.ListarReservas();
+
+            var reservas = reservaDAO.ListarReservas();
+            var socios = socioDAO.ListarSocios();
+            var libros = libroDAO.ListarLibros();
+
+            var datos = reservas.Select(r => new
+            {
+                r.IdReserva,
+                Libro = libros.FirstOrDefault(l => l.IdLibro == r.IdLibro)?.Titulo ?? "Desconocido",
+                Socio = socios.FirstOrDefault(s => s.IdSocio == r.IdSocio)?.NombreSocio ?? "Desconocido",
+                FechaReserva = r.FechaReserva.ToString("dd/MM/yyyy"),
+                r.Activa
+            }).ToList();
+
+            dgvReservas.DataSource = datos;
         }
+
 
         private void CargarLibros()
         {
@@ -134,15 +149,31 @@ namespace BibliotecaApp.UI
                 return;
             }
 
+            // Verificar si existe la reserva
+            Reserva reservaExistente = reservaDAO.ObtenerReservaPorId(id);
+            if (reservaExistente == null)
+            {
+                MessageBox.Show("No se encontró ninguna reserva con ese ID. No se puede eliminar.", "No encontrada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             DialogResult resultado = MessageBox.Show("¿Está seguro que desea eliminar esta reserva?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (resultado == DialogResult.Yes)
             {
-                reservaDAO.EliminarReserva(id);
-                MessageBox.Show("Reserva eliminada.");
-                CargarReservas();
-                LimpiarCampos();
+                try
+                {
+                    reservaDAO.EliminarReserva(id);
+                    MessageBox.Show("Reserva eliminada correctamente.");
+                    CargarReservas();
+                    LimpiarCampos();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al eliminar la reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
+
 
         private void dgvReservas_CellClick(object sender, DataGridViewCellEventArgs e)
         {

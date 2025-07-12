@@ -175,5 +175,26 @@ namespace BibliotecaSystem.DAO
 
             return lista;
         }
+        public bool ExisteUsuario(string nombreUsuario)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(cadenaConexion))
+                {
+                    string query = "SELECT COUNT(*) FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
+                    conn.Open();
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ocurrio un error inesperado al verificar la existencia del usuario.");
+                throw new Exception("Error al verificar existencia de usuario: " + ex.Message);
+            }
+        }
+
     }
 }

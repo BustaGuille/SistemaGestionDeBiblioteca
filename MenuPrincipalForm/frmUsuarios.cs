@@ -38,16 +38,31 @@ namespace BibliotecaApp.UI
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNombreUsuario.Text) || string.IsNullOrWhiteSpace(txtContrasena.Text))
+            //Capturamos los datos que ingreso el usuario
+            string nombreUsuario = txtNombreUsuario.Text.Trim();
+            string contrasena = txtContrasena.Text;
+
+
+            //Aqui validamos que los campos no esten vacios
+            if (string.IsNullOrWhiteSpace(nombreUsuario) || string.IsNullOrWhiteSpace(contrasena))
             {
-                MessageBox.Show("Complete los campos obligatorios.");
+                MessageBox.Show("Debe completar todos los campos obligatorios.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            //Validamos que el nombre de usuario no exista en la base de datos
+            usuarioDAO = new UsuarioDAO();
+            if (usuarioDAO.ExisteUsuario(nombreUsuario))
+            {
+                MessageBox.Show("El nombre de usuario ya existe. Por favor, elija otro.", "Usuario duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
             Usuario nuevo = new Usuario
             {
-                NombreUsuario = txtNombreUsuario.Text,
-                ContraseñaHash = BibliotecaSystem.Utilidades.LogicaSeguridad.HashPassword(txtContrasena.Text)
+                NombreUsuario = nombreUsuario,
+                ContraseñaHash = LogicaSeguridad.HashPassword(contrasena)
             };
 
             usuarioDAO.AgregarUsuario(nuevo);

@@ -8,7 +8,7 @@ namespace BibliotecaSystem.Utilidades
     {
         public static string HashPassword(string input)
         {
-            using (SHA256 shaencrip = SHA256.Create()) // Elige el algoritmo SHA256 para hashear la contraseña
+            using (SHA256 shaencrip = SHA256.Create()) // Creamos una instancia del algoritmo SHA256 para encriptar la contraseña
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(input);  // Convierte la cadena de entrada a un arreglo de bytes ya que  el algoritmo trabaja con texto plano
                 byte[] hashBytes = shaencrip.ComputeHash(bytes); //Devuelve el hash de la cadena de entrada ya encriptada
